@@ -1,31 +1,23 @@
 <template>
   <div>
-    <DestCard v-for="destination in destinations" :key="destination.name" :Destination="destination"/>
+    <h1>Bustime Comparison</h1>
+      <p class="subhead">made for those who can go home on multiple bus routes</p>
   </div>
 </template>
 
 <script setup>
-import DestCard from '@/components/DestCard.vue';
-const destinations = [
-        {
-          name: "Venetian Renaissance",
-          International: true,
-          price: 1300,
-          img: "https://images.unsplash.com/photo-1498307833015-e7b400441eb8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1528&q=80&quot;",
-        },
-        {
-          name: "Swiss Mountain Getaway",
-          International: true,
-          price: 800,
-          img: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1476&q=80&quot;",
-        },
-        {
-          name: "Ibizan Coastal Vacation",
-          International: true,
-          price: 1200,
-          img: "https://images.unsplash.com/photo-1547138494-97041dec734b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80&quot;",
-        }]
+
 </script>
 
-<style scoped></style>
+<style scoped>
+h1{
+    font-size:3rem;
+    text-align: center;
+    font-family: "Inconsolata", monospace;
+}
+.subhead{
+  font-size: 1.5rem;
+  text-align: center;
+}
+</style>
 
