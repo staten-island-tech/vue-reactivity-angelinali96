@@ -14,6 +14,7 @@ h1{
     font-size:3rem;
     text-align: center;
     font-family: "Inconsolata", monospace;
+    font-weight: bolder;
 }
 .subhead{
   font-size: 1.5rem;
