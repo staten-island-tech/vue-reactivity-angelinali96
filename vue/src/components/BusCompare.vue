@@ -1,21 +1,10 @@
 <script setup>
+import SelectDirection from '@/components/SelectDirection.vue';
+import {ref} from "vue";
+const props = defineProps({
+    instance: String,
+});
 
-</script>
-<template>
-    <div class="busCompare">
-        <form action="submit" id="busSubmit">
-        <select name="Select Bus" title="select bus route" class="bus">
-          <option value="">select bus</option>
-        </select>
-        <select name="Select Direction" class="direction" title="select bus direction">
-          <option value="">select direction</option>
-        </select>
-        <input type="submit" value="submit">
-      </form>
-    </div>
-</template>
-
-<script>
 const proxy = 'https://corsproxy.io/?'; 
 const routesApi = 'https://bustime.mta.info/routes/';
 
@@ -39,7 +28,6 @@ function fetchToHtml(data){
         const list = parser.parseFromString(data, "text/html");
         const busList = list.querySelectorAll('ul.routeList li'); // parse fetched site
         busList.forEach(item => optionList(item)); // for each parsed node
-        busesList.forEach(item => insertBuses(item));
     }
 // display results from options
 function optionList(res){
@@ -49,14 +37,19 @@ function optionList(res){
     busInfo.value = list[1];
     busesList.push(busInfo);
 }
-function insertBuses(list){
-  document.querySelector('select').insertAdjacentHTML("beforeend", `
-    <option value="${list.value}">${list.name}</option>
-    ` //insert bus routes in 1
-    );
-}
-
+const options = ref(busesList);
 </script>
+<template>
+    <div>
+        <select name="Select Bus" title="select bus route" class="bus">
+          <option value="">select bus</option>
+          <option v-for="option in options" :value="option.value">
+          {{ option.name }}
+          </option>
+        </select>
+      <SelectDirection/>
+    </div>
+</template>
 
 <style scoped>
 .bus{

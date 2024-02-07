@@ -1,13 +1,12 @@
-
-
 <script setup>
 import BusCompare from '@/components/BusCompare.vue';
+
 </script>
 
 <template>
   <div class="busbus">
-<BusCompare/>
-<BusCompare/>
+<BusCompare instance="1" />
+<!--<BusCompare instance="2" />-->
   </div>
 </template>
 
