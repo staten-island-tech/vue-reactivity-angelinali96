@@ -2,9 +2,9 @@
 
 </script>
 <template>
-    <div>
+    <div class="busCompare">
         <form action="submit" id="busSubmit">
-        <select name="Select Bus" title="select bus route">
+        <select name="Select Bus" title="select bus route" class="bus">
           <option value="">select bus</option>
         </select>
         <select name="Select Direction" class="direction" title="select bus direction">
@@ -59,5 +59,7 @@ function insertBuses(list){
 </script>
 
 <style scoped>
-
+.bus{
+    width: 49%;
+}
 </style>
