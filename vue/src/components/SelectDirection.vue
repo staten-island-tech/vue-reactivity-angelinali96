@@ -1,26 +1,18 @@
 <script setup>
-const props = defineProps({
-    instance: String,
-    directionName: String, 
-    directionId: Number,
-});
+import {ref} from "vue";
+const picked = ref("Direction 1");
 </script>
 <template>
-    <div>
-        <h2>select direction</h2>
-        <div id="radios">               
-    <label for="direction 1">
-      <input type="radio" :name="instance" id="direction 1" value="1" />
-      <span>Direction 1</span>
-    </label>
-    <label for="direction 2">
-      <input type="radio" :name="instance" id="direction 2" value="2" />
-      <span>Direction 2</span>
-    </label>
-  </div>
-    </div>
-</template>
+  
+<div id="radios">
+	<input type="radio" id="Direction1" value="0" v-model="picked" />
+	<label for="Direction1">One</label>
 
+	<input type="radio" id="Direction2" value="1" v-model="picked" />
+  <label for="Direction2">Two</label>
+</div>
+  <p>{{ picked }}</p>
+  </template>
 
 <style scoped>
 #radios label {
@@ -77,8 +69,5 @@ input[type="radio"]:focus + span {
   margin: 0 auto;
   background-color: #1f3b7c;
   padding: 12px;
-}
-.container {
-  margin: 0 auto;
 }
 </style>

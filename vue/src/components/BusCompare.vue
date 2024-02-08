@@ -1,10 +1,6 @@
 <script setup>
 import SelectDirection from '@/components/SelectDirection.vue';
 import {ref} from "vue";
-const props = defineProps({
-    instance: String,
-});
-
 const proxy = 'https://corsproxy.io/?'; 
 const routesApi = 'https://bustime.mta.info/routes/';
 

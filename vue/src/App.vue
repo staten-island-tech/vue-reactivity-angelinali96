@@ -21,9 +21,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
   <RouterView />
 </template>
-<script>
 
-</script>
 <style scoped>
 header {
   line-height: 1.5;
