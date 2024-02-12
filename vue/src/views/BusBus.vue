@@ -38,8 +38,7 @@ const options = ref(busesList);
 
 <template>
   <div class="busbus">
-<BusCompare :options="busesList" />
-<!--<BusCompare instance="2" />-->
+<BusCompare :options="options" />
   </div>
 </template>
 
