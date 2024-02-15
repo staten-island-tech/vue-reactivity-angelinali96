@@ -17,7 +17,7 @@ function receiveData(id){
     <div>
         <BusSelection :options="options" @select-input="receiveData"/>
         <p>{{ selectedbus.busId }}</p>
-        <SelectDirection/>
+        <SelectDirection v-if="selectedbus.busId != 'Select Bus'"/>
     </div>
 </template>
 

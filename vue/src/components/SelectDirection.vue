@@ -33,6 +33,8 @@ async function busDirection(bus){ // fetch stops api
         console.log(error, "API Error");
     }
 }
+const stops1 = reactive({});
+const stops2 = reactive({});
 </script>
 <template>
 <div>
@@ -42,7 +44,7 @@ async function busDirection(bus){ // fetch stops api
         <input type="checkbox">
         <span class="slider round"></span>
       </label>
-      <h3>rainbow mode</h3>
+      <h3>{{directions[1].name}}</h3>
       </div>
 </div>
   </template>
