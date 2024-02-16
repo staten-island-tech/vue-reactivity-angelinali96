@@ -1,11 +1,11 @@
 <script setup>
 import BusCompare from '@/components/BusCompare.vue';
-import {ref} from "vue";
+import {ref, watchEffect} from "vue";
 const proxy = 'https://corsproxy.io/?'; 
 const routesApi = 'https://bustime.mta.info/routes/';
 
 const busesList = []; // pulls from api and list of buses will be stored here
-async function getOptions(){
+watchEffect(async() => {
     try{
         const response = await fetch(proxy+routesApi); // fetch site
         const data = await response.text();
@@ -16,8 +16,7 @@ async function getOptions(){
     } catch (error){
         console.log(error, "Error Fetching Buses");
     }
-}
-getOptions();
+});
 
 function fetchToHtml(data){
     const parser = new DOMParser();

@@ -1,10 +1,10 @@
 <script setup>
-import { reactive } from 'vue';
+// import { reactive } from 'vue';
 
-const props = defineProps({
-  busId: String,
-});
-const directions = reactive([
+/* const props = defineProps({
+  busid: Object,
+}); */
+/* const directions = reactive([
           {
             name: "",
             id: "",
@@ -13,7 +13,7 @@ const directions = reactive([
             name: "",
             id: "",
           }
-        ]);
+        ]); 
 async function busDirection(bus){ // fetch stops api
     try{
         const proxy = 'https://corsproxy.io/?';
@@ -21,24 +21,27 @@ async function busDirection(bus){ // fetch stops api
         const response = await fetch(proxy+direction);
         const data = await response.json();
         const results = data.searchResults.matches[0].directions;
-        directions[0].name = results[0].destination;
+        /* directions[0].name = results[0].destination;
         directions[0].id = results[0].directionId;
         directions[1].name = results[1].destination;
-        directions[1].id = results[1].directionId;
-        console.log(directions);
+        directions[1].id = results[1].directionId; 
+        console.log(results);
         if(response.status != 200){
             throw new Error(response.statusText);
         }
     } catch (error){
         console.log(error, "API Error");
     }
-}
-const stops1 = reactive({});
-const stops2 = reactive({});
+} 
+// busDirection(props.busid);
+ const stops1 = reactive({});
+const stops2 = reactive({}); */
 </script>
 <template>
 <div>
-  <div class="themer">
+  <h2>select direction</h2>
+  <p>{{ busid }}</p>
+  <div class="direction">
         <h3>{{directions[0].name}}</h3>
       <label class="switch">
         <input type="checkbox">
@@ -50,7 +53,13 @@ const stops2 = reactive({});
   </template>
 
 <style scoped>
-.themer{
+div{
+  align-content: center;
+    text-align: center;
+    justify-content: center;
+    width: 49%;
+} 
+.direction{
     display: flex;
     align-content: center;
     text-align: center;
@@ -96,7 +105,7 @@ const stops2 = reactive({});
   }
   
   input:checked + .slider {
-    background-image: linear-gradient(var(--rainbow));
+    background-image: #0d0d0d;
   }
   
   input:focus + .slider {

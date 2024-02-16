@@ -1,7 +1,6 @@
 <script setup>
 import {reactive} from "vue";
 import BusSelection from '@/components/BusSelection.vue';
-import SelectDirection from '@/components/SelectDirection.vue';
 const props = defineProps({
   options: Array,
 });
@@ -17,7 +16,7 @@ function receiveData(id){
     <div>
         <BusSelection :options="options" @select-input="receiveData"/>
         <p>{{ selectedbus.busId }}</p>
-        <SelectDirection v-if="selectedbus.busId != 'Select Bus'"/>
+
     </div>
 </template>
 
