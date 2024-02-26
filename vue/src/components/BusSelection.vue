@@ -1,13 +1,6 @@
-<script setup>
-import {ref} from "vue";
-const props = defineProps({
-    options: Array,
-});
-const emit = defineEmits(['select-input']);
-</script>
 <template>
     <div>
-        <select name="Select Bus" title="select bus route" class="bus" v-on:input="selectInput">
+        <select name="Select Bus" title="select bus route" v-on:input="selectInput()">
           <option value="">select bus</option>
           <option v-for="option in options" :value="option.value">
           {{ option.name }}
@@ -15,17 +8,18 @@ const emit = defineEmits(['select-input']);
         </select>
     </div>
 </template>
-<script>
-export default {
-    methods: {
-        selectInput(){
-        this.$emit('select-input', document.querySelector('select').value);
+<script setup>
+const props = defineProps({
+    options: Array,
+    instance: String,
+});
+const emit = defineEmits(['select-input']);
+function selectInput(){
+        emit('select-input', document.querySelectorAll('select')[props.instance].value);
         }
-    }
-};
 </script>
 <style scoped>
-.bus{
-    width: 49%;
+select{
+    width: 45vw;
 }
 </style>

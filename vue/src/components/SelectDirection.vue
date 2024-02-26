@@ -1,69 +1,29 @@
-<script setup>
-// import { reactive } from 'vue';
-
-/* const props = defineProps({
-  busid: Object,
-}); */
-/* const directions = reactive([
-          {
-            name: "",
-            id: "",
-          },
-          {
-            name: "",
-            id: "",
-          }
-        ]); 
-async function busDirection(bus){ // fetch stops api
-    try{
-        const proxy = 'https://corsproxy.io/?';
-        const direction = `https://bt.mta.info/api/search?q=${bus}`;
-        const response = await fetch(proxy+direction);
-        const data = await response.json();
-        const results = data.searchResults.matches[0].directions;
-        /* directions[0].name = results[0].destination;
-        directions[0].id = results[0].directionId;
-        directions[1].name = results[1].destination;
-        directions[1].id = results[1].directionId; 
-        console.log(results);
-        if(response.status != 200){
-            throw new Error(response.statusText);
-        }
-    } catch (error){
-        console.log(error, "API Error");
-    }
-} 
-// busDirection(props.busid);
- const stops1 = reactive({});
-const stops2 = reactive({}); */
-</script>
 <template>
 <div>
   <h2>select direction</h2>
-  <p>{{ busid }}</p>
   <div class="direction">
-        <h3>{{directions[0].name}}</h3>
+    <h3>{{ busdirections[0] }}</h3>
       <label class="switch">
         <input type="checkbox">
         <span class="slider round"></span>
       </label>
-      <h3>{{directions[1].name}}</h3>
+      <h3>{{ busdirections[1] }}</h3>
       </div>
 </div>
   </template>
+<script setup>
+const props = defineProps({
+  busdirections: Array,
+});
 
+</script>
 <style scoped>
-div{
-  align-content: center;
-    text-align: center;
-    justify-content: center;
-    width: 49%;
-} 
 .direction{
     display: flex;
     align-content: center;
     text-align: center;
     justify-content: center;
+    width: 45vw;
   }
 .switch {
     position: relative;

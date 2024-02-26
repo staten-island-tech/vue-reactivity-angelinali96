@@ -1,3 +1,9 @@
+<template>
+  <div class="busbus">
+<BusCompare :options="options" instance="0"/>
+<BusCompare :options="options" instance="1"/>
+  </div>
+</template>
 <script setup>
 import BusCompare from '@/components/BusCompare.vue';
 import {ref, watchEffect} from "vue";
@@ -34,20 +40,11 @@ function optionList(res){
 }
 const options = ref(busesList);
 </script>
-
-<template>
-  <div class="busbus">
-<BusCompare :options="options" />
-  </div>
-</template>
-
 <style scoped>
 .busbus{
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
-}
-.busCompare{
-  width: 49%;
+  max-width: 100%;
 }
 </style>
