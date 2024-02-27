@@ -1,8 +1,14 @@
 <template>
   <div class="bus">
         <BusSelection :options="options" @select-input="receiveData" :instance="instance"/>
+        <h3>select direction</h3>
+        <div class="switch">
+          <p>{{ directions[0] }}</p>
         <SelectDirection/>
-        <Dropdown editable placeholder="select stop 🔍"/>
+        <p>{{ directions[1] }}</p>
+        </div>
+        <Dropdown editable placeholder="select stop 🔍" :options="busstops0" optionLabel="name"/>
+        <Dropdown editable placeholder="select stop 🔍" :options="busstops1" optionLabel="name"/>
         </div>
 </template>
 <script setup>
@@ -44,34 +50,46 @@ watchEffect(async() => { // fetch stop directions api
 function sortDirection(a, b) {
   return Number(a.directionId) - Number(b.directionId); // make sure the directions are arranged by id 0 and 1 to match with true false val of checkbox
 }
-let busstops0 = reactive([]);
-let busstops1 = reactive([]);
-async function getApi(){ // fetch stops api
+let busstops0 = ref([]); // store stops list for this direction
+let busstops1 = ref([]);
+watchEffect(async() => { // fetch stops api for both arrays
     try{
         const stopsApi = `https://bustime.mta.info/api/stops-on-route-for-direction?routeId=MTA+NYCT_${selectedbus.busId.replace(/\-SBS/, '%2B')}&directionId=`;
         const response0 = await fetch(proxy+encodeURI(stopsApi+0));
         const response1 = await fetch(proxy+encodeURI(stopsApi+1));
         const data0 = await response0.json();
         const data1 = await response1.json();
-        const stops0 = data0.stops;
-        const stops1 = data1.stops;
-        DOMSelect.stops[instance].innerHTML = `<option value="">select stop</option>`;
-        stops.forEach(element => {
-            DOMSelect.stops[instance].insertAdjacentHTML("beforeend", `
-    <option value="${element.id.replace('MTA_', '')}">${element.name}</option>
-    ` 
-    );
+        busstops0 = [];
+        busstops1 = [];
+        data0.stops.forEach(element => {
+        let stopInfo = {};
+        stopInfo.name = element.name;
+        stopInfo.code = element.id.replace('MTA_', '');
+        busstops0.push(stopInfo);
         });
-        if(response.status != 200){
-            throw new Error(response.statusText);
+        data1.stops.forEach(element => {
+        let stopInfo = {};
+        stopInfo.name = element.name;
+        stopInfo.code = element.id.replace('MTA_', '');
+        busstops1.push(stopInfo);
+        });
+        console.log(busstops0, busstops1);
+        if(response0.status != 200 || response1.status != 200){
+            throw new Error(response0.statusText, response1.statusText);
         }
     } catch (error){
         console.log(error, "API Error");
     }
-}
+})
 </script>
 <style scoped>
 .bus{
   width: 49%;
+}
+.switch{
+  width: fit-content;
+  display: flex;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 </style>
