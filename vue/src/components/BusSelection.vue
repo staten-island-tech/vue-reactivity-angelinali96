@@ -20,6 +20,6 @@ function selectInput(){
 </script>
 <style scoped>
 select{
-    width: 45vw;
+    width: 40vw;
 }
 </style>

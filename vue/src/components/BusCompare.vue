@@ -1,28 +1,31 @@
 <template>
-    <div :class="instance">
+  <div class="bus">
         <BusSelection :options="options" @select-input="receiveData" :instance="instance"/>
-        <SelectDirection :busdirections="directions"/>
-    </div>
+        <SelectDirection/>
+        <Dropdown editable placeholder="select stop 🔍"/>
+        </div>
 </template>
 <script setup>
-import {reactive, watchEffect} from "vue";
+import {reactive, watchEffect, ref} from "vue";
 import BusSelection from '@/components/BusSelection.vue';
 import SelectDirection from '@/components/SelectDirection.vue';
+import Dropdown from 'primevue/dropdown';
 const props = defineProps({
-  options: Array,
-  instance: String,
+  options: Array, //receives bus list
+  instance: String, // receives instance to distinguish sides to compare otherwise the props will be the same for both which will defeat the point of making this site
 });
-const emits = defineEmits(['select-input']);
-let selectedbus = reactive({busId: "Select Bus", instance: props.instance});
+const emits = defineEmits(['select-input']); // receives input from selected bus
+const proxy = 'https://corsproxy.io/?';
+const selectedstop = ref(''); // v model var for selected stop input
+let selectedbus = reactive({busId: "Select Bus", instance: props.instance}); // variable for current selected bus
 function receiveData(id){
       // console.log(id);
-      selectedbus.busId = id;
+      selectedbus.busId = id; // receives emit and sets object equal to emit value
     }
 
-let directions = reactive([]);
-watchEffect(async() => { // fetch stops api
+let directions = reactive([]); // stores the two directions the bus can go in
+watchEffect(async() => { // fetch stop directions api
     try{
-        const proxy = 'https://corsproxy.io/?';
         const direction = `https://bt.mta.info/api/search?q=${selectedbus.busId}`;
         const response = await fetch(proxy+direction);
         const data = await response.json();
@@ -39,11 +42,36 @@ watchEffect(async() => { // fetch stops api
     }
 });
 function sortDirection(a, b) {
-  return Number(a.directionId) - Number(b.directionId);
+  return Number(a.directionId) - Number(b.directionId); // make sure the directions are arranged by id 0 and 1 to match with true false val of checkbox
+}
+let busstops0 = reactive([]);
+let busstops1 = reactive([]);
+async function getApi(){ // fetch stops api
+    try{
+        const stopsApi = `https://bustime.mta.info/api/stops-on-route-for-direction?routeId=MTA+NYCT_${selectedbus.busId.replace(/\-SBS/, '%2B')}&directionId=`;
+        const response0 = await fetch(proxy+encodeURI(stopsApi+0));
+        const response1 = await fetch(proxy+encodeURI(stopsApi+1));
+        const data0 = await response0.json();
+        const data1 = await response1.json();
+        const stops0 = data0.stops;
+        const stops1 = data1.stops;
+        DOMSelect.stops[instance].innerHTML = `<option value="">select stop</option>`;
+        stops.forEach(element => {
+            DOMSelect.stops[instance].insertAdjacentHTML("beforeend", `
+    <option value="${element.id.replace('MTA_', '')}">${element.name}</option>
+    ` 
+    );
+        });
+        if(response.status != 200){
+            throw new Error(response.statusText);
+        }
+    } catch (error){
+        console.log(error, "API Error");
+    }
 }
 </script>
 <style scoped>
-.instance{
-  width: 45%;
+.bus{
+  width: 49%;
 }
 </style>

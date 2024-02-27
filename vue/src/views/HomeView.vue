@@ -2,6 +2,7 @@
   <div>
     <h1>Bustime Comparison</h1>
       <p class="subhead">made for those who can go home on multiple bus routes</p>
+      <p>work in progress. </p>
   </div>
 </template>
 

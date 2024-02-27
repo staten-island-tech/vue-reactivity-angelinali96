@@ -1,30 +1,18 @@
 <template>
 <div>
-  <h2>select direction</h2>
   <div class="direction">
-    <h3>{{ busdirections[0] }}</h3>
       <label class="switch">
         <input type="checkbox">
         <span class="slider round"></span>
       </label>
-      <h3>{{ busdirections[1] }}</h3>
       </div>
 </div>
   </template>
 <script setup>
-const props = defineProps({
-  busdirections: Array,
-});
 
 </script>
 <style scoped>
-.direction{
-    display: flex;
-    align-content: center;
-    text-align: center;
-    justify-content: center;
-    width: 45vw;
-  }
+
 .switch {
     position: relative;
     display: inline-block;
@@ -47,7 +35,7 @@ const props = defineProps({
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #2e2e2e;
+    background-color: #6e6d6d;
     -webkit-transition: .4s;
     transition: .4s;
   }
