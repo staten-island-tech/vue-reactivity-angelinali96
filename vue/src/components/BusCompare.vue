@@ -1,7 +1,6 @@
 <template>
   <div class="bus">
         <BusSelection :options="options" @select-input="receiveData" :instance="instance"/>
-
         <h3>select direction</h3>
         <div class="switch">
         <SelectDirection v-model="selecteddirection" :directions="directions"/>
