@@ -13,6 +13,7 @@
     </div>
 </template>
 <script setup>
+// v-bind:class = "(condition)?'class_if_is_true':'else_class'"
 const props = defineProps({
   stop: String,
 });
@@ -60,5 +61,21 @@ function htmlData(data, instance){
     }
 </script>
 <style scoped>
-
+.card{
+    padding: 0.5rem;
+    background-color: #1a0035;
+    margin: 0.5rem 0;
+    width: 40vw;
+    height: auto;
+    text-align: center;
+    align-items: center;
+    border-radius: 15px;
+    box-sizing: border-box;
+    box-shadow: 5px 5px 0px rgba(48, 48, 48, 0.5);
+    color: white;
+}
+summary{
+  font-size: var(--h5);
+  color: rgb(250, 215, 215);
+}
 </style>

@@ -1,20 +1,21 @@
 <template>
   <div class="bus">
         <BusSelection :options="options" @select-input="receiveData" :instance="instance"/>
+
         <h3>select direction</h3>
         <div class="switch">
-        <div>{{ directions[0] }}</div>
-        <SelectDirection v-model="selecteddirection"/>
-        <div>{{ directions[1] }}</div>
+        <SelectDirection v-model="selecteddirection" :directions="directions"/>
         </div>
-        <Dropdown v-model="selectedstop" editable placeholder="🔍 select stop" :options="busstops1" optionLabel="name" v-if="selecteddirection"/>
-        <Dropdown v-model="selectedstop" editable placeholder="🔍 select stop" :options="busstops0" optionLabel="name" v-else/>
+        <Dropdown v-model="selectedstop" editable checkmark placeholder="🔍 stop selection" :options="busstops1" optionLabel="name" v-if="selecteddirection"/>
+        <Dropdown v-model="selectedstop" editable checkmark placeholder="🔍 stop selection" :options="busstops0" optionLabel="name" v-else/>
+        <BusTimes v-if="selectedstop" :stop="selectedstop"/>
         </div>
 </template>
 <script setup>
 import {reactive, watchEffect, ref} from "vue";
 import BusSelection from '@/components/BusSelection.vue';
 import SelectDirection from '@/components/SelectDirection.vue';
+import BusTimes from '@/components/BusTimes.vue';
 import Dropdown from 'primevue/dropdown';
 const props = defineProps({
   options: Array, //receives bus list
@@ -92,5 +93,8 @@ watchEffect(async() => { // fetch stops api for both arrays
   display: flex;
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+[data-pc-name='dropdown']{
+  width: 40vw;
 }
 </style>

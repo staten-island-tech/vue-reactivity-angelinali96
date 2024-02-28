@@ -13,6 +13,7 @@ import { RouterLink, RouterView } from 'vue-router';
         <RouterLink to="/busbus">Bus VS Bus</RouterLink>
         <RouterLink to="/traintrain">Train VS Train</RouterLink>
         <RouterLink to="/trainbus">Train VS Bus</RouterLink>
+        <RouterLink to="/favorites">Favorites</RouterLink>
       </nav>
     </div>
   </header>

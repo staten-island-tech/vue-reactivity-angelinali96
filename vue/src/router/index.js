@@ -23,6 +23,11 @@ const router = createRouter({
       path: '/trainbus',
       name: 'Train VS Bus',
       component: () => import('../views/TrainBus.vue')
+    },
+    {
+      path: '/favorites',
+      name: 'Favorites',
+      component: () => import('../views/FavoriteStops.vue')
     }
   ]
 })
