@@ -3,12 +3,12 @@
         <BusSelection :options="options" @select-input="receiveData" :instance="instance"/>
         <h3>select direction</h3>
         <div class="switch">
-          <p>{{ directions[0] }}</p>
-        <SelectDirection/>
-        <p>{{ directions[1] }}</p>
+        <div>{{ directions[0] }}</div>
+        <SelectDirection v-model="selecteddirection"/>
+        <div>{{ directions[1] }}</div>
         </div>
-        <Dropdown editable placeholder="select stop 🔍" :options="busstops0" optionLabel="name"/>
-        <Dropdown editable placeholder="select stop 🔍" :options="busstops1" optionLabel="name"/>
+        <Dropdown v-model="selectedstop" editable placeholder="🔍 select stop" :options="busstops1" optionLabel="name" v-if="selecteddirection"/>
+        <Dropdown v-model="selectedstop" editable placeholder="🔍 select stop" :options="busstops0" optionLabel="name" v-else/>
         </div>
 </template>
 <script setup>
@@ -22,6 +22,7 @@ const props = defineProps({
 });
 const emits = defineEmits(['select-input']); // receives input from selected bus
 const proxy = 'https://corsproxy.io/?';
+const selecteddirection = ref(false);
 const selectedstop = ref(''); // v model var for selected stop input
 let selectedbus = reactive({busId: "Select Bus", instance: props.instance}); // variable for current selected bus
 function receiveData(id){
@@ -29,7 +30,7 @@ function receiveData(id){
       selectedbus.busId = id; // receives emit and sets object equal to emit value
     }
 
-let directions = reactive([]); // stores the two directions the bus can go in
+let directions = ref(['direction 1', 'direction 2']); // stores the two directions the bus can go in
 watchEffect(async() => { // fetch stop directions api
     try{
         const direction = `https://bt.mta.info/api/search?q=${selectedbus.busId}`;

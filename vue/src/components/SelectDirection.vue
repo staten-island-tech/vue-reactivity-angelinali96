@@ -2,14 +2,14 @@
 <div>
   <div class="direction">
       <label class="switch">
-        <input type="checkbox">
+        <input type="checkbox" v-model="model">
         <span class="slider round"></span>
       </label>
       </div>
 </div>
   </template>
 <script setup>
-
+const model = defineModel();
 </script>
 <style scoped>
 
