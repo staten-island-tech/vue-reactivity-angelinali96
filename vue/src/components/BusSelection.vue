@@ -2,13 +2,14 @@
     <div>
         <select name="Select Bus" title="select bus route" v-on:input="selectInput()">
           <option value="">select bus</option>
-          <option v-for="option in options" :value="option.value">
+          <option v-for="option in busesList" :value="option.code">
           {{ option.name }}
           </option>
         </select>
     </div>
 </template>
 <script setup>
+import { busesList } from '@/stores/busesList';
 const props = defineProps({
     options: Array,
     instance: String,

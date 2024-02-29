@@ -2,6 +2,7 @@
     <div>
         <div class="card">
             <strong>{{ refreshTime.textContent }}</strong>
+            <button class="refresh" @click="getBusTime()">refresh ⟳</button>
             <p v-for="item in busTimes">{{ item.textContent }}</p>
             <details>
         <summary>
@@ -23,8 +24,8 @@ const proxy = 'https://corsproxy.io/?';
 let busTimes = [];
 let refreshTime = '';
 let alerts = [];
-watchEffect(async() =>{
-    let currentTime = Date.now();
+async function getBusTime(){
+  let currentTime = Date.now();
     const timeUrl = `https://bustime.mta.info/m/index?q=${props.stop.code}&cacheBreaker=${currentTime}`;
     try{
         const response = await fetch(proxy+timeUrl, {cache: 'reload', headers: {"Access-Control-Max-Age": 0}}); // fetch site
@@ -36,7 +37,8 @@ watchEffect(async() =>{
     } catch (error){
         console.log(error, "Error Fetching Buses");
     }
-})
+}
+watchEffect(async() =>{getBusTime()});
 function htmlData(data){
     const parser = new DOMParser();
         const list = parser.parseFromString(data, "text/html");
@@ -77,5 +79,19 @@ function htmlData(data){
 summary{
   font-size: var(--h5);
   color: rgb(250, 215, 215);
+}
+button[class="refresh"]{
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.5rem;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  margin: 0.5rem 0;
+  width: 14vw;
+  background-color: rgb(107, 0, 0);
+  color: white;
 }
 </style>

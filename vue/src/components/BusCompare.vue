@@ -1,6 +1,6 @@
 <template>
   <div class="bus">
-    <Dropdown v-model="selectedbus" editable checkmark placeholder="select" :options="options" optionLabel="name"/>
+        <BusSelection :options="options" @select-input="receiveData" :instance="instance"/>
         <h3>select direction</h3>
         <div class="switch">
         <SelectDirection v-model="selecteddirection" :directions="directions"/>
@@ -11,7 +11,7 @@
         </div>
 </template>
 <script setup>
-import {reactive, watchEffect, watch, ref} from "vue";
+import {reactive, watchEffect, ref} from "vue";
 import BusSelection from '@/components/BusSelection.vue';
 import SelectDirection from '@/components/SelectDirection.vue';
 import BusTimes from '@/components/BusTimes.vue';
@@ -30,8 +30,8 @@ function receiveData(id){
       selectedbus.name = id; // receives emit and sets object equal to emit value
     }
 
-let directions = ref(['direction 1', 'direction 2']); // stores the two directions the bus can go in
-watch(()=>selectedbus.name, async() => { // fetch stop directions api
+let directions = reactive(['direction 1', 'direction 2']); // stores the two directions the bus can go in
+watchEffect(async() => { // fetch stop directions api
     try{
         const direction = `https://bt.mta.info/api/search?q=${selectedbus.name}`;
         const response = await fetch(proxy+direction);
@@ -47,7 +47,7 @@ watch(()=>selectedbus.name, async() => { // fetch stop directions api
     } catch (error){
         console.log(error, "API Error");
     }
-}, { immediate: true });
+});
 function sortDirection(a, b) {
   return Number(a.directionId) - Number(b.directionId); // make sure the directions are arranged by id 0 and 1 to match with true false val of checkbox
 }
