@@ -17,7 +17,6 @@ watchEffect(async() => {
         const response = await fetch(proxy+routesApi); // fetch site
         const data = await response.text();
         fetchToHtml(data);
-        console.log(busesList);
         if(response.status != 200){
             throw new Error(response.statusText);
         }

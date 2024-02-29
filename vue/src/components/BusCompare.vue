@@ -1,6 +1,6 @@
 <template>
   <div class="bus">
-        <BusSelection :options="options" @select-input="receiveData" :instance="instance"/>
+    <Dropdown v-model="selectedbus" editable checkmark placeholder="select" :options="options" optionLabel="name"/>
         <h3>select direction</h3>
         <div class="switch">
         <SelectDirection v-model="selecteddirection" :directions="directions"/>
@@ -24,16 +24,16 @@ const emits = defineEmits(['select-input']); // receives input from selected bus
 const proxy = 'https://corsproxy.io/?';
 const selecteddirection = ref(false);
 const selectedstop = ref(''); // v model var for selected stop input
-let selectedbus = reactive({busId: "Select Bus", instance: props.instance}); // variable for current selected bus
+let selectedbus = reactive({name: "Select Bus"}); // variable for current selected bus
 function receiveData(id){
       // console.log(id);
-      selectedbus.busId = id; // receives emit and sets object equal to emit value
+      selectedbus.name = id; // receives emit and sets object equal to emit value
     }
 
 let directions = ref(['direction 1', 'direction 2']); // stores the two directions the bus can go in
-watch(()=>selectedbus.busId, async() => { // fetch stop directions api
+watch(()=>selectedbus.name, async() => { // fetch stop directions api
     try{
-        const direction = `https://bt.mta.info/api/search?q=${selectedbus.busId}`;
+        const direction = `https://bt.mta.info/api/search?q=${selectedbus.name}`;
         const response = await fetch(proxy+direction);
         const data = await response.json();
         let directionsResult = (data.searchResults.matches[0].directions).sort(sortDirection);
@@ -55,7 +55,7 @@ let busstops0 = ref([]); // store stops list for this direction
 let busstops1 = ref([]);
 watchEffect(async() => { // fetch stops api for both arrays
     try{
-        const stopsApi = `https://bustime.mta.info/api/stops-on-route-for-direction?routeId=MTA+NYCT_${selectedbus.busId.replace(/\-SBS/, '%2B')}&directionId=`;
+        const stopsApi = `https://bustime.mta.info/api/stops-on-route-for-direction?routeId=MTA+NYCT_${selectedbus.name.replace(/\-SBS/, '%2B')}&directionId=`;
         const response0 = await fetch(proxy+encodeURI(stopsApi+0));
         const response1 = await fetch(proxy+encodeURI(stopsApi+1));
         const data0 = await response0.json();
