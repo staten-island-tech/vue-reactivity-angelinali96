@@ -11,7 +11,7 @@
         </div>
 </template>
 <script setup>
-import {reactive, watchEffect, ref} from "vue";
+import {reactive, watchEffect, watch, ref} from "vue";
 import BusSelection from '@/components/BusSelection.vue';
 import SelectDirection from '@/components/SelectDirection.vue';
 import BusTimes from '@/components/BusTimes.vue';
@@ -31,7 +31,7 @@ function receiveData(id){
     }
 
 let directions = ref(['direction 1', 'direction 2']); // stores the two directions the bus can go in
-watchEffect(async() => { // fetch stop directions api
+watch(()=>selectedbus.busId, async() => { // fetch stop directions api
     try{
         const direction = `https://bt.mta.info/api/search?q=${selectedbus.busId}`;
         const response = await fetch(proxy+direction);
@@ -47,7 +47,7 @@ watchEffect(async() => { // fetch stop directions api
     } catch (error){
         console.log(error, "API Error");
     }
-});
+}, { immediate: true });
 function sortDirection(a, b) {
   return Number(a.directionId) - Number(b.directionId); // make sure the directions are arranged by id 0 and 1 to match with true false val of checkbox
 }

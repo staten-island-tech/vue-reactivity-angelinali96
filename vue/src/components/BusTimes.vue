@@ -41,14 +41,20 @@ function htmlData(data){
     const parser = new DOMParser();
         const list = parser.parseFromString(data, "text/html");
         busTimes = list.querySelectorAll('.directionAtStop'); // parse fetched site
+        busTimes.forEach(function(item){
+            item.childNodes.forEach(function(item){
+                busTimes = [];
+                busTimes.push(item);
+            });
+        });
         refreshTime = list.querySelector('#refresh a strong');
-    const busHeaders = document.querySelectorAll('p');
-    busHeaders.forEach(function(item){
+    // const busHeaders = document.querySelectorAll('p').textContent;
+    /* busHeaders.forEach(function(item){
         if(item.innerText.includes('\u00A0') == true){
             item.className = "busHead";
         }
-    });
-      alerts = (list.querySelectorAll('.alerts li')).length;
+    }); */
+      alerts = (list.querySelectorAll('.alerts li'));
     // alerts.forEach(item => document.getElementById("alerts"+instance).insertAdjacentHTML("beforeend", `<p>${item.textContent}</p>`));
     // console.log(document.getElementById("alerts"+instance));
     console.log(busTimes, refreshTime, alerts);

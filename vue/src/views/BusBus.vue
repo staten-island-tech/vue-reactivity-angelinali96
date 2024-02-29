@@ -7,7 +7,7 @@
 </template>
 <script setup>
 import BusCompare from '@/components/BusCompare.vue';
-import {ref, watchEffect} from "vue";
+import {reactive, watchEffect} from "vue";
 const proxy = 'https://corsproxy.io/?'; 
 const routesApi = 'https://bustime.mta.info/routes/';
 
@@ -17,13 +17,14 @@ watchEffect(async() => {
         const response = await fetch(proxy+routesApi); // fetch site
         const data = await response.text();
         fetchToHtml(data);
+        console.log(busesList);
         if(response.status != 200){
             throw new Error(response.statusText);
         }
     } catch (error){
         console.log(error, "Error Fetching Buses");
     }
-});
+},{ immediate: true });
 
 function fetchToHtml(data){
     const parser = new DOMParser();
@@ -39,7 +40,7 @@ function optionList(res){
     busInfo.value = list[1];
     busesList.push(busInfo);
 }
-const options = ref(busesList);
+const options = reactive(busesList);
 </script>
 <style scoped>
 .busbus{
