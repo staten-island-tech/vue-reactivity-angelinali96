@@ -5,7 +5,7 @@ compare two buses (bus vs bus tab)
 ## to be added functionality
 compare two trains
 compare train and bus
-## currently broken
-- bustime information only displays first node
+## current issues
 - directions only load if the state of the checkbox (stylized as a tab) is changed
 - list of buses isn't as user friendly without search
+- refresh is limited to one instance at a time, more efficient if both at once

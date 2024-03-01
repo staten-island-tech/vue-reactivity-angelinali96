@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>Bustime Comparison</h1>
-      <p class="subhead">made for those who can go home on multiple bus routes</p>
+    <h1>MTA Transit Comparison</h1>
+      <p class="subhead">made for those who need to check multiple buses/trains.</p>
       <p>work in progress. </p>
       <a href="https://github.com/staten-island-tech/vue-reactivity-angelinali96/blob/main/README.md">readme</a>
   </div>

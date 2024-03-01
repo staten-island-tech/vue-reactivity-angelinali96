@@ -1,25 +1,27 @@
 <template>
     <div>
         <div class="card">
-            <strong>{{ refreshTime.textContent }}</strong>
+            <strong :key="componentKey">{{ refreshTime.textContent }}</strong>
             <button class="refresh" @click="getBusTime()">refresh ⟳</button>
-            <p v-for="item in busTimes">{{ item.textContent }}</p>
+            <p v-for="item in busTimes" :key="componentKey" v-bind:class="item.innerText.includes('\u00A0') ? 'busHead' : 'time'">{{ item.textContent }}</p>
             <details>
         <summary>
           service alerts ({{ alerts.length }})
         </summary>
-        <p v-for="alert in alerts">{{ alert.textContent }}</p>
+        <p v-for="alert in alerts" class="time" :key="componentKey">{{ alert.textContent }}</p>
       </details>
         </div>
     </div>
 </template>
 <script setup>
-// v-bind:class = "(condition)?'class_if_is_true':'else_class'"
 import {watchEffect, ref} from "vue";
 const props = defineProps({
   stop: Object,
 });
-console.log(props.stop.code);
+const componentKey = ref(0);
+const forceRerender = () => {
+  componentKey.value += 1;
+};
 const proxy = 'https://corsproxy.io/?';
 let busTimes = ref([]);
 let refreshTime = ref('');
@@ -30,7 +32,8 @@ async function getBusTime(){
     try{
         const response = await fetch(proxy+timeUrl, {cache: 'reload', headers: {"Access-Control-Max-Age": 0}}); // fetch site
         const data = await response.text();
-        htmlData(data);
+        htmlDataTime(data);
+        forceRerender();
         if(response.status != 200){
             throw new Error(response.statusText);
         }
@@ -39,28 +42,21 @@ async function getBusTime(){
     }
 }
 watchEffect(async() =>{getBusTime()});
-function htmlData(data){
+function htmlDataTime(data){
     const parser = new DOMParser();
         const list = parser.parseFromString(data, "text/html");
-        busTimes = list.querySelectorAll('.directionAtStop'); // parse fetched site
-        busTimes.forEach(function(item){
+        const busTimeContainers = list.querySelectorAll('.directionAtStop'); // parse fetched site
+        busTimes = [];
+        busTimeContainers.forEach(function(item){
             item.childNodes.forEach(function(item){
-                busTimes = [];
                 busTimes.push(item);
             });
         });
         refreshTime = list.querySelector('#refresh a strong');
-    // const busHeaders = document.querySelectorAll('p').textContent;
-    /* busHeaders.forEach(function(item){
-        if(item.innerText.includes('\u00A0') == true){
-            item.className = "busHead";
-        }
-    }); */
       alerts = (list.querySelectorAll('.alerts li'));
-    // alerts.forEach(item => document.getElementById("alerts"+instance).insertAdjacentHTML("beforeend", `<p>${item.textContent}</p>`));
-    // console.log(document.getElementById("alerts"+instance));
     console.log(busTimes, refreshTime, alerts);
     }
+  
 </script>
 <style scoped>
 .card{
@@ -93,5 +89,11 @@ button[class="refresh"]{
   width: 14vw;
   background-color: rgb(107, 0, 0);
   color: white;
+}
+.busHead{
+  font-weight: bolder;
+}
+.time{
+  text-align: left;
 }
 </style>
