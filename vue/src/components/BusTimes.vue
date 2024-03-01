@@ -15,15 +15,15 @@
 </template>
 <script setup>
 // v-bind:class = "(condition)?'class_if_is_true':'else_class'"
-import {watchEffect} from "vue";
+import {watchEffect, ref} from "vue";
 const props = defineProps({
   stop: Object,
 });
 console.log(props.stop.code);
 const proxy = 'https://corsproxy.io/?';
-let busTimes = [];
-let refreshTime = '';
-let alerts = [];
+let busTimes = ref([]);
+let refreshTime = ref('');
+let alerts = ref([]);
 async function getBusTime(){
   let currentTime = Date.now();
     const timeUrl = `https://bustime.mta.info/m/index?q=${props.stop.code}&cacheBreaker=${currentTime}`;
