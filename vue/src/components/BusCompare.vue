@@ -7,7 +7,7 @@
         </div>
         <Dropdown v-model="selectedstop" editable checkmark placeholder="🔍 stop selection" :options="busstops1" optionLabel="name" v-if="selecteddirection"/>
         <Dropdown v-model="selectedstop" editable checkmark placeholder="🔍 stop selection" :options="busstops0" optionLabel="name" v-else/>
-        <BusTimes v-if="selectedstop" :stop="selectedstop"/>
+        <BusTimes :stop="selectedstop"/>
         </div>
 </template>
 <script setup>
@@ -17,7 +17,6 @@ import SelectDirection from '@/components/SelectDirection.vue';
 import BusTimes from '@/components/BusTimes.vue';
 import Dropdown from 'primevue/dropdown';
 const props = defineProps({
-  options: Array, //receives bus list
   instance: String, // receives instance to distinguish sides to compare otherwise the props will be the same for both which will defeat the point of making this site
 });
 const emits = defineEmits(['select-input']); // receives input from selected bus

@@ -1,6 +1,7 @@
 <template>
     <div>
-        <p>placeholder content. this page is a work in progress. </p>
+        <div>placeholder for train component. </div>
+        <div>placeholder for train component. </div>
     </div>
 </template>
 
