@@ -39,7 +39,6 @@ watchEffect(async() => { // fetch stop directions api
         directions = [];
         directions.push(directionsResult[0].destination);
         directions.push(directionsResult[1].destination);
-        console.log(directions);
         if(response.status != 200){
             throw new Error(response.statusText);
         }
@@ -73,7 +72,6 @@ watchEffect(async() => { // fetch stops api for both arrays
         stopInfo.code = element.id.replace('MTA_', '');
         busstops1.push(stopInfo);
         });
-        console.log(busstops0, busstops1);
         if(response0.status != 200 || response1.status != 200){
             throw new Error(response0.statusText, response1.statusText);
         }

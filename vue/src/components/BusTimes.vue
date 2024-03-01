@@ -54,7 +54,6 @@ function htmlDataTime(data){
         });
         refreshTime = list.querySelector('#refresh a strong');
       alerts = (list.querySelectorAll('.alerts li'));
-    console.log(busTimes, refreshTime, alerts);
     }
   
 </script>

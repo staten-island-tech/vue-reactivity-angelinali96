@@ -9,3 +9,4 @@ compare train and bus
 - directions only load if the state of the checkbox (stylized as a tab) is changed
 - list of buses isn't as user friendly without search
 - refresh is limited to one instance at a time, more efficient if both at once
+- console returns fetch errors beause inputs haven't been received but watch still runs
