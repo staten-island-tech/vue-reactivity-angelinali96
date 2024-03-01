@@ -1,6 +1,6 @@
 <template>
   <div class="bus">
-        <BusSelection :options="options" @select-input="receiveData" :instance="instance"/>
+        <BusSelection @select-input="receiveData" :instance="instance"/>
         <h3>select direction</h3>
         <div class="switch">
         <SelectDirection v-model="selecteddirection" :directions="directions"/>
@@ -22,8 +22,8 @@ const props = defineProps({
 const emits = defineEmits(['select-input']); // receives input from selected bus
 const proxy = 'https://corsproxy.io/?';
 const selecteddirection = ref(false);
-const selectedstop = ref(''); // v model var for selected stop input
-let selectedbus = reactive({name: "Select Bus"}); // variable for current selected bus
+const selectedstop = ref({code: '🔍 stop selection'}); // v model var for selected stop input
+let selectedbus = reactive({}); // variable for current selected bus
 function receiveData(id){
       // console.log(id);
       selectedbus.name = id; // receives emit and sets object equal to emit value
