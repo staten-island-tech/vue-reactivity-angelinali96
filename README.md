@@ -2,7 +2,7 @@
 site to compare times of buses and trains at different stops.
 ## current functionality
 compare two buses (bus vs bus tab)
-## to be aded functionality
+## to be added functionality
 compare two trains
 compare train and bus
 ## currently broken
