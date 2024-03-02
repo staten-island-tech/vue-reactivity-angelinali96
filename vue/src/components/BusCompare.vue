@@ -5,8 +5,8 @@
         <div class="switch">
         <SelectDirection v-model="selecteddirection" :directions="directions"/>
         </div>
-        <Dropdown v-model="selectedstop" editable checkmark placeholder="🔍 stop selection" :options="busstops1" optionLabel="name" v-if="selecteddirection"/>
-        <Dropdown v-model="selectedstop" editable checkmark placeholder="🔍 stop selection" :options="busstops0" optionLabel="name" v-else/>
+        <Dropdown aria-label="select stop from direction 1" v-model="selectedstop" editable checkmark placeholder="🔍 stop selection" :options="busstops1" optionLabel="name" v-if="selecteddirection"/>
+        <Dropdown aria-label="select stop from direction 2" v-model="selectedstop" editable checkmark placeholder="🔍 stop selection" :options="busstops0" optionLabel="name" v-else/>
         <BusTimes :stop="selectedstop"/>
         </div>
 </template>

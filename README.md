@@ -10,3 +10,4 @@ compare train and bus
 - list of buses isn't as user friendly without search
 - refresh is limited to one instance at a time, more efficient if both at once
 - console returns fetch errors beause inputs haven't been received but watch still runs
+- deployed version on netlify will load routerview tab, but if the same page is reloaded it will display a site not found
