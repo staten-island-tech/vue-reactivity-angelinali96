@@ -21,7 +21,7 @@ const props = defineProps({
 const emits = defineEmits(['select-input']); // receives input from selected bus
 const proxy = 'https://corsproxy.io/?';
 const selecteddirection = ref(false);
-const selectedstop = ref({code: '🔍 stop selection'}); // v model var for selected stop input
+const selectedstop = ref({name: '🔍 stop selection', code: '🔍 stop selection'}); // v model var for selected stop input
 let selectedbus = reactive({}); // variable for current selected bus
 function receiveData(id){
       // console.log(id);
@@ -64,7 +64,7 @@ watchEffect(async() => { // fetch both stops api for both arrays and display con
         const data1 = await response1.json();
         busstops0 = [];
         busstops1 = [];
-        data0.stops.forEach(element => {
+        data0.stops.forEach(element => { // push stops into array
         let stopInfo = {};
         stopInfo.name = element.name;
         stopInfo.code = element.id.replace('MTA_', '');

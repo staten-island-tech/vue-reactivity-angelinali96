@@ -23,10 +23,10 @@ const forceRerender = () => {
   componentKey.value += 1;
 };
 const proxy = 'https://corsproxy.io/?';
-let busTimes = ref([]);
+let busTimes = ref([]); // store the content taht will be pushed into html
 let refreshTime = ref('');
 let alerts = ref([]);
-async function getBusTime(){
+async function getBusTime(){ // fetch api
   let currentTime = Date.now();
     const timeUrl = `https://bustime.mta.info/m/index?q=${props.stop.code}&cacheBreaker=${currentTime}`;
     try{
@@ -91,6 +91,7 @@ button[class="refresh"]{
 }
 .busHead{
   font-weight: bolder;
+  font-size: 1rem;
 }
 .time{
   text-align: left;
