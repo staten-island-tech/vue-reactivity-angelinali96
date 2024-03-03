@@ -1,9 +1,8 @@
 <template>
   <div class="bus">
         <BusSelection @select-input="receiveData" :instance="instance"/>
-        <h3>select direction</h3>
         <div class="switch">
-        <SelectDirection v-model="selecteddirection" :directions="directions"/>
+        <SelectDirection v-model="selecteddirection" :directions="directions" :key="componentKey"/>
         </div>
         <Dropdown aria-label="select stop from direction 1" v-model="selectedstop" editable checkmark placeholder="🔍 stop selection" :options="busstops1" optionLabel="name" v-if="selecteddirection"/>
         <Dropdown aria-label="select stop from direction 2" v-model="selectedstop" editable checkmark placeholder="🔍 stop selection" :options="busstops0" optionLabel="name" v-else/>
@@ -30,6 +29,10 @@ function receiveData(id){
     }
 
 let directions = reactive(['direction 1', 'direction 2']); // stores the two directions the bus can go in
+const componentKey = ref(0);
+const forceRerender = () => { // force a component rerender to avoid having to change state of checkbox to show name of directions
+  componentKey.value += 1;
+};
 watchEffect(async() => { // fetch stop directions api
     try{
         const direction = `https://bt.mta.info/api/search?q=${selectedbus.name}`;
@@ -39,6 +42,7 @@ watchEffect(async() => { // fetch stop directions api
         directions = [];
         directions.push(directionsResult[0].destination);
         directions.push(directionsResult[1].destination);
+        forceRerender();
         if(response.status != 200){
             throw new Error(response.statusText);
         }
@@ -51,7 +55,7 @@ function sortDirection(a, b) {
 }
 let busstops0 = ref([]); // store stops list for this direction
 let busstops1 = ref([]);
-watchEffect(async() => { // fetch stops api for both arrays
+watchEffect(async() => { // fetch both stops api for both arrays and display conditionally
     try{
         const stopsApi = `https://bustime.mta.info/api/stops-on-route-for-direction?routeId=MTA+NYCT_${selectedbus.name.replace(/\-SBS/, '%2B')}&directionId=`;
         const response0 = await fetch(proxy+encodeURI(stopsApi+0));

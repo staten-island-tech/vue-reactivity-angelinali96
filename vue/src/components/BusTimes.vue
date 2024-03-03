@@ -1,14 +1,14 @@
 <template>
     <div>
-        <div class="card">
-            <strong :key="componentKey">{{ refreshTime.textContent }}</strong>
+        <div class="card" :key="componentKey">
+            <strong>{{ refreshTime.textContent }}</strong>
             <button class="refresh" @click="getBusTime()">refresh ⟳</button>
-            <p v-for="item in busTimes" :key="componentKey" v-bind:class="item.innerText.includes('\u00A0') ? 'busHead' : 'time'">{{ item.textContent }}</p>
+            <p v-for="item in busTimes" v-bind:class="item.innerText.includes('\u00A0') ? 'busHead' : 'time'">{{ item.textContent }}</p>
             <details>
         <summary>
           service alerts ({{ alerts.length }})
         </summary>
-        <p v-for="alert in alerts" class="time" :key="componentKey">{{ alert.textContent }}</p>
+        <p v-for="alert in alerts" class="time">{{ alert.textContent }}</p>
       </details>
         </div>
     </div>
@@ -18,7 +18,7 @@ import {watchEffect, ref} from "vue";
 const props = defineProps({
   stop: Object,
 });
-const componentKey = ref(0);
+const componentKey = ref(0); // force component to refresh bc idk why it wasnt refreshing
 const forceRerender = () => {
   componentKey.value += 1;
 };

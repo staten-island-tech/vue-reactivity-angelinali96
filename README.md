@@ -6,8 +6,8 @@ compare two buses (bus vs bus tab)
 compare two trains
 compare train and bus
 ## current issues
-- directions only load if the state of the checkbox (stylized as a tab) is changed
 - list of buses isn't as user friendly without search
 - refresh is limited to one instance at a time, more efficient if both at once
-- console returns fetch errors beause inputs haven't been received but watch still runs
+- console returns fetch errors beause inputs haven't been received for all fetch requests but watch still runs on load
 - deployed version on netlify will load routerview tab, but if the same page is reloaded it will display a site not found
+ - this bug is probably netlify's fault tho 🗿
