@@ -1,21 +1,20 @@
 <template>
     <div>
-        <select name="Select Bus" title="select bus route" v-on:input="selectInput()">
-          <option value="">select bus</option>
-          <option v-for="option in busesList" :value="option.code">
-          {{ option.name }}
-          </option>
-        </select>
+        <Dropdown v-model="selectedbus" :aria-label="'select bus '+instance" editable checkmark placeholder="🔍 bus selection" :options="busesList" optionLabel="name" optionValue="code"/>
     </div>
 </template>
 <script setup>
+import { ref, watch } from 'vue';
 import { busesList } from '@/stores/busesList';
+import Dropdown from 'primevue/dropdown';
 const props = defineProps({
     instance: String,
 });
-const emit = defineEmits(['select-input']);
+const selectedbus = ref({});
+const emit = defineEmits(['select-input']); // emit variable to buscompare component
+watch(selectedbus, async() => selectInput());
 function selectInput(){
-        emit('select-input', document.querySelectorAll('select')[props.instance].value);
+        emit('select-input', selectedbus);
         }
 </script>
 <style scoped>
