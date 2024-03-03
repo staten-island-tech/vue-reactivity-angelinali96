@@ -11,7 +11,6 @@
 <script setup>
 import { busesList } from '@/stores/busesList';
 const props = defineProps({
-    options: Array,
     instance: String,
 });
 const emit = defineEmits(['select-input']);

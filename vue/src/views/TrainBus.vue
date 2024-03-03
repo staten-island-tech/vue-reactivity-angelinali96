@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>placeholder for train component. </div>
-        <BusCompare instance="1"/>
+        <BusCompare instance="0"/>
     </div>
 </template>
 
