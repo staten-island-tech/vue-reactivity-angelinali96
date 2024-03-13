@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Dropdown v-model="selectedtrain" :aria-label="'select train '+instance" editable checkmark placeholder="🔍 train selection" :options="trainsList" optionLabel="name" optionValue="code"/>
+        <Dropdown v-model="selectedtrain" :aria-label="'select train '+instance" filter checkmark placeholder="🔍 train selection" :options="trainsList" optionLabel="name" optionValue="code"/>
     </div>
 </template>
 <script setup>

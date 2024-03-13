@@ -1,14 +1,14 @@
 <template>
     <div class="train">
           <TrainSelection @select-input="receiveData" :instance="instance"/>
-          <Dropdown aria-label="select stop from direction 1" v-model="selectedstop" editable checkmark placeholder="🔍 stop selection" :options="busstops1" optionLabel="name"/>
+          <Dropdown aria-label="select stop from direction 1" v-model="selectedstop" filter checkmark placeholder="🔍 stop selection" :options="busstops1" optionLabel="name"/>
           <TrainTimes :stop="selectedstop"/>
           </div>
   </template>
   <script setup>
   import {reactive, watchEffect, ref} from "vue";
   import TrainSelection from '@/components/TrainSelection.vue';
-  import BusTimes from '@/components/TrainTimes.vue';
+  import TrainTimes from '@/components/TrainTimes.vue';
   import Dropdown from 'primevue/dropdown';
   const props = defineProps({
     instance: String, // receives instance to distinguish sides to compare otherwise the props will be the same for both which will defeat the point of making this site

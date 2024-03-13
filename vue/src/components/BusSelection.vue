@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Dropdown v-model="selectedbus" :aria-label="'select bus '+instance" editable checkmark placeholder="🔍 bus selection" :options="busesList" optionLabel="name" optionValue="code"/>
+        <Dropdown v-model="selectedbus" :aria-label="'select bus '+instance" filter checkmark placeholder="🔍 bus selection" :options="busesList" optionLabel="name" optionValue="code"/>
     </div>
 </template>
 <script setup>
@@ -18,7 +18,7 @@ function selectInput(){
         }
 </script>
 <style scoped>
-select{
+[data-pc-name="dropdown"]{
     width: 40vw;
 }
 </style>
