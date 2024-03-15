@@ -8,6 +8,7 @@ Compare two buses (bus vs bus tab).
 - favorites list of stops saved to local storage
 - stats on wait time in diff regions (?)
 - idk maybe other stuff if this gets carried into adv cs? 咱拭目以待
+- maybe lirr https://traintime.mta.info/main?
 ## Current Issues
 - css is mid (i won't be fixing that 😁)
 - some fetch is executed on load when it probably shouldnt

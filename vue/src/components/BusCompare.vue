@@ -4,8 +4,10 @@
         <div class="switch">
         <SelectDirection v-model="selecteddirection" :directions="directions" :key="componentKey"/>
         </div>
+        <div :key="componentKey">
         <Dropdown aria-label="select stop from direction 1" v-model="selectedstop" filter checkmark placeholder="🔍 stop selection" :options="busstops1" optionLabel="name" v-if="selecteddirection"/>
         <Dropdown aria-label="select stop from direction 2" v-model="selectedstop" filter checkmark placeholder="🔍 stop selection" :options="busstops0" optionLabel="name" v-else/>
+        </div>
         <BusTimes :stop="selectedstop"/>
         </div>
 </template>
@@ -75,6 +77,7 @@ watchEffect(async() => { // fetch both stops api for both arrays and display con
         stopInfo.name = element.name;
         stopInfo.code = element.id.replace('MTA_', '');
         busstops1.push(stopInfo);
+        forceRerender();
         });
         if(response0.status != 200 || response1.status != 200){
             throw new Error(response0.statusText, response1.statusText);

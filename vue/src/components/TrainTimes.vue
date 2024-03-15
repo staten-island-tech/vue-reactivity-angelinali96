@@ -27,10 +27,10 @@ let busTimes = ref([]); // store the content taht will be pushed into html
 let refreshTime = ref('');
 let alerts = ref([]);
 async function getTrainTime(){ // fetch api
-  let currentTime = Date.now();
-    const timeUrl = `https://bustime.mta.info/m/index?q=${props.stop.code}&cacheBreaker=${currentTime}`;
+  // let currentTime = Date.now(); &cacheBreaker=${currentTime}
+    const timeUrl = `https://otp-mta-prod.camsys-apps.com/otp/routers/default/nearby?stops=${props.stop.code}&apikey=Z276E3rCeTzOQEoBPPN4JCEc6GfvdnYE`;
     try{
-        const response = await fetch(proxy+timeUrl, {cache: 'reload', headers: {"Access-Control-Max-Age": 0}}); // fetch site
+        const response = await fetch(encodeURI(timeUrl), {cache: 'reload', headers: {"Access-Control-Max-Age": 0}}); // fetch site
         const data = await response.text();
         htmlDataTime(data);
         forceRerender();
@@ -41,7 +41,7 @@ async function getTrainTime(){ // fetch api
         console.log(error, "Error Fetching Buses");
     }
 }
-watchEffect(async() =>{getBusTime()});
+watchEffect(async() =>{getTrainTime()});
 function htmlDataTime(data){
     const parser = new DOMParser();
         const list = parser.parseFromString(data, "text/html");
