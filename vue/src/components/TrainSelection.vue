@@ -1,6 +1,17 @@
 <template>
     <div>
-        <Dropdown v-model="selectedtrain" :aria-label="'select train '+instance" filter checkmark placeholder="🔍 train selection" :options="trainsList" optionLabel="name" optionValue="code"/>
+        <Dropdown v-model="selectedtrain" :aria-label="'select train '+instance" filter checkmark placeholder="🔍 train selection" :options="trainsList">
+            <template #value="slotProps">
+                <div class="flex align-items-center">
+                    <img :alt="slotProps.value.name" :src="slotProps.value.image"/>
+                </div>
+            </template>
+            <template #option="slotProps">
+                <div class="flex align-items-center">
+                    <img :alt="slotProps.option.name" :src="slotProps.option.image"/>
+                </div>
+            </template>
+        </Dropdown>
     </div>
 </template>
 <script setup>
