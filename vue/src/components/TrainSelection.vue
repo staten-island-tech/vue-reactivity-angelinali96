@@ -9,6 +9,7 @@
             <template #option="slotProps">
                 <div class="flex align-items-center">
                     <img :alt="slotProps.option.name" :src="slotProps.option.image"/>
+                    {{ slotProps.option.name }}
                 </div>
             </template>
         </Dropdown>

@@ -1,9 +1,12 @@
 <template>
     <div>
         <div class="card" :key="componentKey">
-            <strong>{{ refreshTime.textContent }}</strong>
+            <strong>{{ Date(refreshTime).toLocaleString() }}</strong>
             <button class="refresh" @click="getTrainTime()">refresh ⟳</button>
-            <p v-for="item in trainTimes" v-bind:class="item.includes(' - ') ? 'trainsHead' : 'time'">{{ item }}</p>
+            <div v-for="item in trainTimes">
+            <p class="trainHead">{{ item.trainName }}</p>
+            <p v-for="time in item.times">{{ Math.floor((time-Date.now())/60000) }} minutes, (arrives at {{ toTime(time) }})</p>
+            </div>
             <details>
         <summary>
           service alerts ({{ alerts.length }})
@@ -29,6 +32,13 @@ const proxy = 'https://corsproxy.io/?';
 let trainTimes = ref([]); // store the content that will be pushed into html
 let refreshTime = ref('');
 let alerts = ref([]);
+function toTime(time){
+  time = new Date(time);
+  const hour = time.getHours();
+  const minute = time.getMinutes();
+  const second = time.getSeconds();
+  return `${hour}:${minute}:${second}`;
+}
 async function getTrainTime(){ // fetch api
   // let currentTime = Date.now(); &cacheBreaker=${currentTime}
     const timeUrl = `https://otp-mta-prod.camsys-apps.com/otp/routers/default/nearby?stops=${props.stop.code}&apikey=Z276E3rCeTzOQEoBPPN4JCEc6GfvdnYE`;
@@ -36,15 +46,18 @@ async function getTrainTime(){ // fetch api
         const response = await fetch(encodeURI(timeUrl), {cache: 'reload', headers: {"Access-Control-Max-Age": 0}}); // fetch site
         const data = await response.json();
         let trainTimeContainers = data[0].groups;
-        refreshTime = data[0].groups[0].time[0].timestamp;
+        alerts = data[0].alerts;
+        refreshTime = (data[0].groups[0].times[0].timestamp)*1000;
         trainTimes = [];
         trainTimeContainers.forEach(function(item){
-          trainTimes.push(item.route.shortName +' - '+ item.headsign);
+          const group = {};
+          group.trainName = item.route.shortName +' - '+ item.headsign;
+          group.times = [];
           item.times.forEach(function(item){
-            trainTimes.push(Number(item.serviceDay) + Number(item.realtimeArrival));
+            group.times.push((item.serviceDay + item.realtimeArrival)*1000);
           });
+          trainTimes.push(group);
         });
-        alerts = data[0].alerts;
         forceRerender();
         console.log(trainTimes);
         if(response.status != 200){
