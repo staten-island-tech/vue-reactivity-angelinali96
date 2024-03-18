@@ -3,12 +3,15 @@
         <div class="card" :key="componentKey">
             <strong>{{ refreshTime.textContent }}</strong>
             <button class="refresh" @click="getTrainTime()">refresh ⟳</button>
-            <p v-for="item in busTimes" v-bind:class="item.innerText.includes('\u00A0') ? 'busHead' : 'time'">{{ item.textContent }}</p>
+            <p v-for="item in trainTimes" v-bind:class="item.includes(' - ') ? 'trainsHead' : 'time'">{{ item }}</p>
             <details>
         <summary>
           service alerts ({{ alerts.length }})
         </summary>
-        <p v-for="alert in alerts" class="time">{{ alert.textContent }}</p>
+        <div v-for="alert in alerts" class="time">
+          <p class="trainHead">{{ alert.humanReadableActivePeriod }}</p>
+          <p>{{ alert.alertDescriptionText }}</p>
+        </div>
       </details>
         </div>
     </div>
@@ -23,7 +26,7 @@ const forceRerender = () => {
   componentKey.value += 1;
 };
 const proxy = 'https://corsproxy.io/?';
-let busTimes = ref([]); // store the content taht will be pushed into html
+let trainTimes = ref([]); // store the content that will be pushed into html
 let refreshTime = ref('');
 let alerts = ref([]);
 async function getTrainTime(){ // fetch api
@@ -31,30 +34,27 @@ async function getTrainTime(){ // fetch api
     const timeUrl = `https://otp-mta-prod.camsys-apps.com/otp/routers/default/nearby?stops=${props.stop.code}&apikey=Z276E3rCeTzOQEoBPPN4JCEc6GfvdnYE`;
     try{
         const response = await fetch(encodeURI(timeUrl), {cache: 'reload', headers: {"Access-Control-Max-Age": 0}}); // fetch site
-        const data = await response.text();
-        htmlDataTime(data);
+        const data = await response.json();
+        let trainTimeContainers = data[0].groups;
+        refreshTime = data[0].groups[0].time[0].timestamp;
+        trainTimes = [];
+        trainTimeContainers.forEach(function(item){
+          trainTimes.push(item.route.shortName +' - '+ item.headsign);
+          item.times.forEach(function(item){
+            trainTimes.push(Number(item.serviceDay) + Number(item.realtimeArrival));
+          });
+        });
+        alerts = data[0].alerts;
         forceRerender();
+        console.log(trainTimes);
         if(response.status != 200){
             throw new Error(response.statusText);
         }
     } catch (error){
-        console.log(error, "Error Fetching Buses");
+        console.log(error, "Error Fetching Trains");
     }
 }
 watchEffect(async() =>{getTrainTime()});
-function htmlDataTime(data){
-    const parser = new DOMParser();
-        const list = parser.parseFromString(data, "text/html");
-        const busTimeContainers = list.querySelectorAll('.directionAtStop'); // parse fetched site
-        busTimes = [];
-        busTimeContainers.forEach(function(item){
-            item.childNodes.forEach(function(item){
-                busTimes.push(item);
-            });
-        });
-        refreshTime = list.querySelector('#refresh a strong');
-      alerts = (list.querySelectorAll('.alerts li'));
-    }
   
 </script>
 <style scoped>
@@ -89,7 +89,7 @@ button[class="refresh"]{
   background-color: rgb(107, 0, 0);
   color: white;
 }
-.busHead{
+.trainHead{
   font-weight: bolder;
   font-size: 1rem;
 }
