@@ -110,9 +110,19 @@ const trainsList = [ // current as of mar 13 2024
         "image": "https://new.mta.info/themes/custom/bootstrap_mta/js/apps/566ed247e9487d43c1f1cc7e8ea5f456.svg"
     },
     {
+        "name": "SF",
+        "code": "FS",
+        "image": "https://new.mta.info/themes/custom/bootstrap_mta/js/apps/c01e0840361272a0585e94a540d6755f.svg"
+    },
+    {
         "name": "S",
-        "code": "S",
-        "image": "https://new.mta.info/themes/custom/bootstrap_mta/js/apps/da91e0c35571668af52eb6164a71f33e.svg" // theres also sf and sr trains not sure what those are rn
+        "code": "GS",
+        "image": "https://new.mta.info/themes/custom/bootstrap_mta/js/apps/da91e0c35571668af52eb6164a71f33e.svg"
+    },
+    {
+        "name": "SR",
+        "code": "H",
+        "image": "https://new.mta.info/themes/custom/bootstrap_mta/js/apps/ee2e30facb9a6c4b8bf0c43e531a36ab.svg"
     },
     {
         "name": "SI",

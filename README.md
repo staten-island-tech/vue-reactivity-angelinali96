@@ -1,11 +1,12 @@
 # What This Is
 Site to compare times of buses and trains at different stops.
 ## Current Functionality
-Compare two buses (bus vs bus tab).
+- Compare two buses (bus vs bus tab).
+- compare two trains (train vs train tab).
+- compare a train and a bus (train vs bus tab). 
 ## To Be Added Functionality
-- compare two trains
-- compare train and bus
 - favorites list of stops saved to local storage
+- loading animations
 - stats on wait time in diff regions (?)
 - idk maybe other stuff if this gets carried into adv cs? 咱拭目以待
 - maybe lirr https://traintime.mta.info/main?

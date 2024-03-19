@@ -14,13 +14,9 @@
     instance: String, // receives instance to distinguish sides to compare otherwise the props will be the same for both which will defeat the point of making this site
   });
   const emits = defineEmits(['select-input']); // receives input from selected train
-  const proxy = 'https://corsproxy.io/?';
-// subwaystats.com
-// https://collector-otp-prod.camsys-apps.com/schedule/MTASBWY/stopsForRoute?routeId=MTASBWY:A
   const selectedstop = ref({name: '🔍 stop selection', code: '🔍 stop selection'}); // v model var for selected stop input
   let selectedtrain = reactive({}); // variable for current selected train
   function receiveData(id){
-        // console.log(id);
         selectedtrain.name = id; // receives emit and sets object equal to emit value
       }
   
@@ -31,7 +27,7 @@
   let trainstops = ref([]);
   watchEffect(async() => { // fetch both stops api for both arrays and display conditionally
       try{
-          const stopsApi = `https://collector-otp-prod.camsys-apps.com/schedule/MTASBWY/stopsForRoute?routeId=MTASBWY:${selectedtrain.name.name}`;
+          const stopsApi = `https://collector-otp-prod.camsys-apps.com/schedule/MTASBWY/stopsForRoute?routeId=MTASBWY:${selectedtrain.name.code}`;
           const response = await fetch(encodeURI(stopsApi));
           const data = await response.json();
           trainstops = [];

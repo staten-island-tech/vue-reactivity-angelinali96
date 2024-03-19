@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="card" :key="componentKey">
-            <strong>{{ Date(refreshTime).toLocaleString() }}</strong>
+            <strong>refreshed at {{ toTime(refreshTime) }}</strong>
             <button class="refresh" @click="getTrainTime()">refresh ⟳</button>
             <div v-for="item in trainTimes">
             <p class="trainHead">{{ item.trainName }}</p>
@@ -28,9 +28,8 @@ const componentKey = ref(0); // force component to refresh bc idk why it wasnt r
 const forceRerender = () => {
   componentKey.value += 1;
 };
-const proxy = 'https://corsproxy.io/?';
 let trainTimes = ref([]); // store the content that will be pushed into html
-let refreshTime = ref('');
+let refreshTime = ref(0);
 let alerts = ref([]);
 function toTime(time){
   time = new Date(time);
@@ -59,7 +58,6 @@ async function getTrainTime(){ // fetch api
           trainTimes.push(group);
         });
         forceRerender();
-        console.log(trainTimes);
         if(response.status != 200){
             throw new Error(response.statusText);
         }

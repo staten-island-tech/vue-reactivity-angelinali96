@@ -4,6 +4,7 @@
             <template #value="slotProps">
                 <div class="flex align-items-center">
                     <img :alt="slotProps.value.name" :src="slotProps.value.image"/>
+                    {{ slotProps.value.name }}
                 </div>
             </template>
             <template #option="slotProps">
