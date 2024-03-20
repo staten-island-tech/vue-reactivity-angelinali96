@@ -3,7 +3,7 @@ import './assets/main.css'
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import PrimeVue from 'primevue/config';
-import 'primevue/resources/themes/aura-light-green/theme.css';
+import 'primevue/resources/themes/aura-dark-green/theme.css';
 
 
 import App from './App.vue'
