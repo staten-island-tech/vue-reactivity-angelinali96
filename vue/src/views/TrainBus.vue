@@ -3,12 +3,14 @@
     <div class="trainbus">
         <TrainCompare instance="0"/>
         <BusCompare instance="1"/>
+        <ScrollTop />
     </div>
 </template>
 
 <script setup>
 import BusCompare from '@/components/BusCompare.vue';
 import TrainCompare from '@/components/TrainCompare.vue';
+import ScrollTop from 'primevue/scrolltop';
 </script>
 
 <style scoped>

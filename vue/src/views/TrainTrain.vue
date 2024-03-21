@@ -3,11 +3,13 @@
     <div class="traintrain">
         <TrainCompare instance="0"/>
         <TrainCompare instance="1"/>
+        <ScrollTop />
     </div>
 </template>
 
 <script setup>
 import TrainCompare from '@/components/TrainCompare.vue';
+import ScrollTop from 'primevue/scrolltop';
 </script>
 
 <style scoped>
