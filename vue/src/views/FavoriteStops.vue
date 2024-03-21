@@ -5,7 +5,7 @@
         <p>this will store saved stops do directly compare their bus/train times. </p>
         <p>didn't figure out how to store stuff in local mem yet</p>
     </div>
-<FavoriteButton/>
+
 </template>
 
 <script setup>

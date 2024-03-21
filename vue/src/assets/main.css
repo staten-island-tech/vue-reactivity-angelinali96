@@ -33,3 +33,32 @@ a,
     padding: 0 2rem;
   }
 }
+
+/* Order */
+@layer reset, primevue;
+
+/* Reset CSS */
+@layer reset {
+  .p-tabview .p-tabview-panels,
+[data-pc-section="panelcontainer"]{
+  padding: 0.5rem 0rem 0rem 0rem !important;
+}
+li[class='p-tabview-header p-highlight'],
+li[class='p-tabview-header']{
+  display: flex;
+  flex-direction: column;
+  width: 20vw; 
+}
+.p-tabview-nav-link,
+[class='p-tabview-nav-link p-tabview-header-action'] {
+  border-width: 0 0 0 0 !important;
+}
+a[class='p-tabview-nav-link p-tabview-header-action'],
+span.p-tabview-title{
+  width: 20vw;
+  height: auto;
+  text-wrap: wrap;
+  white-space: normal !important;
+  overflow-wrap: break-word;
+}
+}
