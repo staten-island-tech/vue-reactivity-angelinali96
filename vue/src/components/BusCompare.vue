@@ -18,7 +18,6 @@
 <script setup>
 import {reactive, watchEffect, ref} from "vue";
 import BusSelection from '@/components/BusSelection.vue';
-import SelectDirection from '@/components/SelectDirection.vue';
 import BusTimes from '@/components/BusTimes.vue';
 import Dropdown from 'primevue/dropdown';
 import TabView from 'primevue/tabview';
@@ -97,18 +96,10 @@ watchEffect(async() => { // fetch both stops api for both arrays and display con
 .bus{
   width: 49%;
 }
-.switch{
-  width: fit-content;
-  display: flex;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-[data-pc-name='dropdown']{
+[data-pc-name='dropdown'],
+.p-tabview,
+.p-tabview-panels,
+.p-tabview-panel{
   width: 40vw;
-}
-[class='p-button p-component'],
-span.p-button-label{
-  width: 20vw;
-  text-wrap: balance;
 }
 </style>
