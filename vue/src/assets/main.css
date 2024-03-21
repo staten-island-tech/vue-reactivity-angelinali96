@@ -45,13 +45,20 @@ a,
 }
 li[class='p-tabview-header p-highlight'],
 li[class='p-tabview-header']{
-  height: auto;
+  display: flex;
+  flex-direction: column;
   width: 20vw; 
+}
+.p-tabview-nav-link,
+[class='p-tabview-nav-link p-tabview-header-action'] {
+  border-width: 0 0 0 0 !important;
 }
 a[class='p-tabview-nav-link p-tabview-header-action'],
 span.p-tabview-title{
   width: 20vw;
   height: auto;
   text-wrap: wrap;
+  white-space: normal !important;
+  overflow-wrap: break-word;
 }
 }
