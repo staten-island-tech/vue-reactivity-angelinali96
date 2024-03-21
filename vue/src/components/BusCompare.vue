@@ -1,13 +1,17 @@
 <template>
   <div class="bus">
         <BusSelection @select-input="receiveData" :instance="instance"/>
-        <div class="switch">
-        <SelectDirection v-model="selecteddirection" :directions="directions" :key="componentKey"/>
-        </div>
         <div :key="componentKey">
-        <Dropdown aria-label="select stop from direction 1" v-model="selectedstop" filter checkmark placeholder="🔍 stop selection" :options="busstops1" optionLabel="name" v-if="selecteddirection"/>
-        <Dropdown aria-label="select stop from direction 2" v-model="selectedstop" filter checkmark placeholder="🔍 stop selection" :options="busstops0" optionLabel="name" v-else/>
+        <TabView>
+    <TabPanel :header="directions[0]">
+        <Dropdown aria-label="select stop from direction 1" v-model="selectedstop" filter checkmark placeholder="🔍 stop selection" :options="busstops0" optionLabel="name"/>
+    </TabPanel>
+    <TabPanel :header="directions[1]">
+        <Dropdown aria-label="select stop from direction 2" v-model="selectedstop" filter checkmark placeholder="🔍 stop selection" :options="busstops1" optionLabel="name"/>
+    </TabPanel>
+</TabView>
         </div>
+        
         <BusTimes :stop="selectedstop"/>
         </div>
 </template>
@@ -17,6 +21,8 @@ import BusSelection from '@/components/BusSelection.vue';
 import SelectDirection from '@/components/SelectDirection.vue';
 import BusTimes from '@/components/BusTimes.vue';
 import Dropdown from 'primevue/dropdown';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
 const props = defineProps({
   instance: String, // receives instance to distinguish sides to compare otherwise the props will be the same for both which will defeat the point of making this site
 });
@@ -99,5 +105,10 @@ watchEffect(async() => { // fetch both stops api for both arrays and display con
 }
 [data-pc-name='dropdown']{
   width: 40vw;
+}
+[class='p-button p-component'],
+span.p-button-label{
+  width: 20vw;
+  text-wrap: balance;
 }
 </style>
