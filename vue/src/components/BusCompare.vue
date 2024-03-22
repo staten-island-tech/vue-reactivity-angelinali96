@@ -1,7 +1,7 @@
 <template>
   <div class="bus">
     <Accordion :active-index="doneselect">
-    <AccordionTab :header="'bus '+instance">
+    <AccordionTab :header="selectedstop.name">
         <BusSelection @select-input="receiveData" :instance="instance"/>
         <div :key="componentKey">
         <TabView>
