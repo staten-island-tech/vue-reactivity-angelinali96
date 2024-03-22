@@ -1,7 +1,7 @@
 <template>
     <div class="train">
       <Accordion :active-index="doneselect">
-    <AccordionTab :header="'train '+instance">
+    <AccordionTab :header="selectedstop.name">
           <TrainSelection @select-input="receiveData" :instance="instance"/>
           <Dropdown :key="componentKey" aria-label="select stop from direction 1" v-model="selectedstop" filter checkmark placeholder="🔍 stop selection" :options="trainstops" optionLabel="name"/>
         </AccordionTab>
