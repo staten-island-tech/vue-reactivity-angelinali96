@@ -1,8 +1,12 @@
 <template>
     <div class="train">
+      <Accordion :active-index="doneselect">
+    <AccordionTab :header="'train '+instance">
           <TrainSelection @select-input="receiveData" :instance="instance"/>
           <Dropdown :key="componentKey" aria-label="select stop from direction 1" v-model="selectedstop" filter checkmark placeholder="🔍 stop selection" :options="trainstops" optionLabel="name"/>
-          <TrainTimes :stop="selectedstop"/>
+        </AccordionTab>
+      </Accordion>
+          <TrainTimes :stop="selectedstop" v-model="doneselect"/>
           </div>
   </template>
   <script setup>
@@ -10,6 +14,8 @@
   import TrainSelection from '@/components/TrainSelection.vue';
   import TrainTimes from '@/components/TrainTimes.vue';
   import Dropdown from 'primevue/dropdown';
+  import Accordion from "primevue/accordion";
+  import AccordionTab from "primevue/accordiontab";
   const props = defineProps({
     instance: String, // receives instance to distinguish sides to compare otherwise the props will be the same for both which will defeat the point of making this site
   });
@@ -19,7 +25,7 @@
   function receiveData(id){
         selectedtrain.name = id; // receives emit and sets object equal to emit value
       }
-  
+  let doneselect = ref(0);
   const componentKey = ref(0);
   const forceRerender = () => { // force a component rerender to avoid having to change state of checkbox to show name of directions
     componentKey.value += 1;

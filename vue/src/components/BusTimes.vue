@@ -18,6 +18,7 @@ import {watchEffect, ref} from "vue";
 const props = defineProps({
   stop: Object,
 });
+const model = defineModel();
 const componentKey = ref(0); // force component to refresh bc idk why it wasnt refreshing
 const forceRerender = () => {
   componentKey.value += 1;
@@ -34,6 +35,9 @@ async function getBusTime(){ // fetch api
         const data = await response.text();
         htmlDataTime(data);
         forceRerender();
+        if(props.stop.code != '🔍 stop selection'){
+          model.value++;
+        }
         if(response.status != 200){
             throw new Error(response.statusText);
         }
@@ -41,7 +45,7 @@ async function getBusTime(){ // fetch api
         console.log(error, "Error Fetching Buses");
     }
 }
-watchEffect(async() =>{getBusTime()});
+watchEffect(async() =>{getBusTime();});
 function htmlDataTime(data){
     const parser = new DOMParser();
         const list = parser.parseFromString(data, "text/html");

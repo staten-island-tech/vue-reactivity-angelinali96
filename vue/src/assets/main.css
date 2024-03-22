@@ -43,6 +43,12 @@ a,
 [data-pc-section="panelcontainer"]{
   padding: 0.5rem 0rem 0rem 0rem !important;
 }
+[data-pc-name="accordiontab"]{
+  width: 40vw;
+}
+.p-accordion-content{
+  padding: 0rem 0rem 0rem 0rem !important;
+}
 li[class='p-tabview-header p-highlight'],
 li[class='p-tabview-header']{
   display: flex;
