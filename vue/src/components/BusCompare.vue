@@ -1,5 +1,7 @@
 <template>
   <div class="bus">
+    <Accordion :active-index="doneselect">
+    <AccordionTab :header="'bus '+instance">
         <BusSelection @select-input="receiveData" :instance="instance"/>
         <div :key="componentKey">
         <TabView>
@@ -11,8 +13,9 @@
     </TabPanel>
 </TabView>
         </div>
-        
-        <BusTimes :stop="selectedstop"/>
+        </AccordionTab>
+      </Accordion>
+        <BusTimes :stop="selectedstop" v-model="doneselect"/>
         </div>
 </template>
 <script setup>
@@ -22,14 +25,16 @@ import BusTimes from '@/components/BusTimes.vue';
 import Dropdown from 'primevue/dropdown';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
+import Accordion from "primevue/accordion";
+import AccordionTab from "primevue/accordiontab";
 const props = defineProps({
   instance: String, // receives instance to distinguish sides to compare otherwise the props will be the same for both which will defeat the point of making this site
 });
 const emits = defineEmits(['select-input']); // receives input from selected bus
 const proxy = 'https://corsproxy.io/?';
-const selecteddirection = ref(false);
 const selectedstop = ref({name: '🔍 stop selection', code: '🔍 stop selection'}); // v model var for selected stop input
 let selectedbus = reactive({}); // variable for current selected bus
+let doneselect = ref(0);
 function receiveData(id){
       // console.log(id);
       selectedbus.name = id; // receives emit and sets object equal to emit value

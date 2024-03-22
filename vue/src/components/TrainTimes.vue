@@ -24,6 +24,7 @@ import {watchEffect, ref} from "vue";
 const props = defineProps({
   stop: Object,
 });
+const model = defineModel();
 const componentKey = ref(0); // force component to refresh bc idk why it wasnt refreshing
 const forceRerender = () => {
   componentKey.value += 1;
@@ -57,6 +58,9 @@ async function getTrainTime(){ // fetch api
           });
           trainTimes.push(group);
         });
+        if(props.stop.code != '🔍 stop selection'){
+          model.value++;
+        }
         forceRerender();
         if(response.status != 200){
             throw new Error(response.statusText);
