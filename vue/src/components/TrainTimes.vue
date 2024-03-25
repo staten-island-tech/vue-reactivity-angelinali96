@@ -13,7 +13,8 @@
         </summary>
         <div v-for="alert in alerts" class="time">
           <p class="trainHead">{{ alert.humanReadableActivePeriod }}</p>
-          <p>{{ alert.alertDescriptionText }}</p>
+          <p>{{ alert.alertHeaderText }}</p>
+          <details>{{ alert.alertDescriptionText }}</details>
         </div>
       </details>
         </div>
