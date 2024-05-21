@@ -27,6 +27,8 @@ import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
+import loading from "@/stores/loadingVar";
+import errorDisplay from "@/stores/errorVar";
 const props = defineProps({
   instance: String, // receives instance to distinguish sides to compare otherwise the props will be the same for both which will defeat the point of making this site
 });
@@ -46,20 +48,29 @@ const forceRerender = () => { // force a component rerender to avoid having to c
   componentKey.value += 1;
 };
 watchEffect(async() => { // fetch stop directions api
+  if(selectedbus.name === '🔍 stop selection' || selectedbus.name === undefined){
+    return;
+  }
     try{
         const direction = `https://bt.mta.info/api/search?q=${selectedbus.name}`;
         const response = await fetch(proxy+direction);
+        loading.value = true;
         const data = await response.json();
         let directionsResult = (data.searchResults.matches[0].directions).sort(sortDirection);
         directions = [];
         directions.push(directionsResult[0].destination);
         directions.push(directionsResult[1].destination);
         forceRerender();
+        loading.value = false;
         if(response.status != 200){
+          errorDisplay.value = true;
+          setTimeout(errorDisplay.value = false, 3500);
             throw new Error(response.statusText);
         }
     } catch (error){
+      errorDisplay.value = true;
         console.log(error, "API Error");
+        setTimeout(errorDisplay.value = false, 3500);
     }
 });
 function sortDirection(a, b) {
@@ -68,9 +79,13 @@ function sortDirection(a, b) {
 let busstops0 = ref([]); // store stops list for this direction
 let busstops1 = ref([]);
 watchEffect(async() => { // fetch both stops api for both arrays and display conditionally
-    try{
+  if(selectedbus.name === '🔍 stop selection' || selectedbus.name === undefined){
+    return;
+  }
+  try{
         const stopsApi = `https://bustime.mta.info/api/stops-on-route-for-direction?routeId=MTA+NYCT_${selectedbus.name.replace(/\-SBS/, '%2B')}&directionId=`;
         const response0 = await fetch(proxy+encodeURI(stopsApi+0));
+        loading.value = true;
         const response1 = await fetch(proxy+encodeURI(stopsApi+1));
         const data0 = await response0.json();
         const data1 = await response1.json();
@@ -88,12 +103,17 @@ watchEffect(async() => { // fetch both stops api for both arrays and display con
         stopInfo.code = element.id.replace('MTA_', '');
         busstops1.push(stopInfo);
         forceRerender();
+        loading.value = false;
         });
         if(response0.status != 200 || response1.status != 200){
+          errorDisplay.value = true;
+          setTimeout(errorDisplay.value = false, 3500);
             throw new Error(response0.statusText, response1.statusText);
         }
     } catch (error){
+      errorDisplay.value = false;
         console.log(error, "API Error");
+        setTimeout(errorDisplay.value = false, 3500);
     }
 })
 </script>

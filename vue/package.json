@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/core": "^10.9.0",
     "bootstrap-vue": "^2.23.1",
     "md-block": "^0.0.1",
     "pinia": "^2.1.7",
