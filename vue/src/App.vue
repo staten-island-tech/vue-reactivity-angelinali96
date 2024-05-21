@@ -1,5 +1,9 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
+import ProgressSpinner from 'primevue/progressspinner';
+import InlineMessage from 'primevue/inlinemessage';
+import loading from './stores/loadingVar';
+import errorDisplay from './stores/errorVar';
 </script>
 
 <template>
@@ -9,13 +13,13 @@ import { RouterLink, RouterView } from 'vue-router';
 
       <nav>
         <RouterLink to="/">Favorites</RouterLink>
-        <RouterLink to="/busbus">Bus VS Bus</RouterLink>
-        <RouterLink to="/traintrain">Train VS Train</RouterLink>
-        <RouterLink to="/trainbus">Train VS Bus</RouterLink>
+        <RouterLink to="/compare">Compare</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div>
   </header>
+  <ProgressSpinner v-if="loading === true" style="position: fixed;width: 50px; height: 50px" strokeWidth="8" fill="var(--surface-ground)"/>
+  <InlineMessage v-if="errorDisplay === true" severity="error" style="position: fixed;">Error loading. </InlineMessage>
   <RouterView />
   <footer>
     <a aria-label="Github Repository" title="GitHub" href="https://github.com/staten-island-tech/vue-reactivity-angelinali96">

@@ -15,6 +15,8 @@
 </template>
 <script setup>
 import {watchEffect, ref} from "vue";
+import loading from "@/stores/loadingVar";
+import error from "@/stores/errorVar";
 const props = defineProps({
   stop: Object,
 });
@@ -28,13 +30,18 @@ let busTimes = ref([]); // store the content taht will be pushed into html
 let refreshTime = ref('');
 let alerts = ref([]);
 async function getBusTime(){ // fetch api
+  if(props.stop.code === '🔍 stop selection' || props.stop.code === undefined){
+    return;
+  }
   let currentTime = Date.now();
     const timeUrl = `https://bustime.mta.info/m/index?q=${props.stop.code}&cacheBreaker=${currentTime}`;
     try{
         const response = await fetch(proxy+timeUrl, {cache: 'reload', headers: {"Access-Control-Max-Age": 0}}); // fetch site
+        loading.value = true;
         const data = await response.text();
         htmlDataTime(data);
         forceRerender();
+        loading.value = false;
         if(props.stop.code != '🔍 stop selection'){
           model.value++;
         }
@@ -54,6 +61,7 @@ function htmlDataTime(data){
         busTimeContainers.forEach(function(item){
             item.childNodes.forEach(function(item){
                 busTimes.push(item);
+                loading.value = false;
             });
         });
         refreshTime = list.querySelector('#refresh a strong');

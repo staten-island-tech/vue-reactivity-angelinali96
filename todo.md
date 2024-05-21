@@ -1,6 +1,5 @@
 # to do list
 - favorites system saved with session
-- merge train bus into one page with tabbed selection for instance 
 - add lirr train time
 - add path train time
 - add nice bus time

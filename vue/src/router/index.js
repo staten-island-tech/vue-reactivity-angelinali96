@@ -10,24 +10,14 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/busbus',
-      name: 'Bus VS Bus',
-      component: () => import('../views/BusBus.vue')
-    },
-    {
-      path: '/traintrain',
-      name: 'Train VS Train',
-      component: () => import('../views/TrainTrain.vue')
-    },
-    {
-      path: '/trainbus',
-      name: 'Train VS Bus',
-      component: () => import('../views/TrainBus.vue')
-    },
-    {
       path: '/',
       name: 'Favorites',
       component: () => import('../views/FavoriteStops.vue')
+    },
+    {
+      path: '/compare',
+      name: 'compare transit',
+      component: () => import('../views/ComparePage.vue')
     }
   ]
 })

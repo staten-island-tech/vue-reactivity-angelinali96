@@ -22,6 +22,8 @@
 </template>
 <script setup>
 import {watchEffect, ref} from "vue";
+import loading from "@/stores/loadingVar";
+import error from "@/stores/errorVar";
 const props = defineProps({
   stop: Object,
 });
@@ -42,9 +44,13 @@ function toTime(time){
 }
 async function getTrainTime(){ // fetch api
   // let currentTime = Date.now(); &cacheBreaker=${currentTime}
+  if(props.stop.code === '🔍 stop selection'){
+    return;
+  }
     const timeUrl = `https://otp-mta-prod.camsys-apps.com/otp/routers/default/nearby?stops=${props.stop.code}&apikey=Z276E3rCeTzOQEoBPPN4JCEc6GfvdnYE`;
     try{
         const response = await fetch(encodeURI(timeUrl), {cache: 'reload', headers: {"Access-Control-Max-Age": 0}}); // fetch site
+        loading.value = true;
         const data = await response.json();
         let trainTimeContainers = data[0].groups;
         alerts = data[0].alerts;
@@ -63,6 +69,7 @@ async function getTrainTime(){ // fetch api
           model.value++;
         }
         forceRerender();
+        loading.value = false;
         if(response.status != 200){
             throw new Error(response.statusText);
         }

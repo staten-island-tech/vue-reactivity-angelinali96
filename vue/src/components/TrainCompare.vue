@@ -16,6 +16,8 @@
   import Dropdown from 'primevue/dropdown';
   import Accordion from "primevue/accordion";
   import AccordionTab from "primevue/accordiontab";
+  import loading from "@/stores/loadingVar";
+  import error from "@/stores/errorVar";
   const props = defineProps({
     instance: String, // receives instance to distinguish sides to compare otherwise the props will be the same for both which will defeat the point of making this site
   });
@@ -35,6 +37,7 @@
       try{
           const stopsApi = `https://collector-otp-prod.camsys-apps.com/schedule/MTASBWY/stopsForRoute?routeId=MTASBWY:${selectedtrain.name.code}`;
           const response = await fetch(encodeURI(stopsApi));
+          loading.value = true;
           const data = await response.json();
           trainstops = [];
           data.forEach(element => { // push stops into array
@@ -44,6 +47,7 @@
           trainstops.push(stopInfo);
           });
           forceRerender();
+          loading.value = false;
           console.log(trainstops);
           if(response.status != 200){
               throw new Error(response.statusText);
