@@ -2,7 +2,7 @@
     <div>
         <div class="card" :key="componentKey">
             <strong>{{ refreshTime.textContent }}</strong>
-            <button class="refresh" @click="getBusTime()">refresh ⟳</button>
+            <Button @click="getBusTime()" aria-label="refresh ⟳" icon="pi pi-refresh" severity="danger"/>
             <p v-for="item in busTimes" v-bind:class="item.innerText.includes('\u00A0') ? 'busHead' : 'time'">{{ item.textContent }}</p>
             <details>
         <summary>
@@ -10,13 +10,18 @@
         </summary>
         <p v-for="alert in alerts" class="time">{{ alert.textContent }}</p>
       </details>
+      <Button icon="pi pi-heart" aria-label="favorite stop" @click="local.addFavorite(props.stop.name, props.stop, 'bus')"/>
+
         </div>
     </div>
 </template>
 <script setup>
+import Button from "primevue/button";
 import {watchEffect, ref} from "vue";
 import loading from "@/stores/loadingVar";
+import { localStore } from "@/stores/local";
 import error from "@/stores/errorVar";
+const local = localStore();
 const props = defineProps({
   stop: Object,
 });

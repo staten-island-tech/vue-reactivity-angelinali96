@@ -1,9 +1,20 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
+import { onMounted } from 'vue';
 import ProgressSpinner from 'primevue/progressspinner';
 import InlineMessage from 'primevue/inlinemessage';
 import loading from './stores/loadingVar';
 import errorDisplay from './stores/errorVar';
+import { localStore } from './stores/local';
+const local = localStore();
+function favoriteList(){
+  if(!local.local.favorites){
+  local.initializeFavorite();
+}/* else{
+  console.log(local.local.favorites)
+} */
+}
+onMounted(() => favoriteList());
 </script>
 
 <template>

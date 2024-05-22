@@ -2,7 +2,7 @@
     <div>
         <div class="card" :key="componentKey">
             <strong>refreshed at {{ toTime(refreshTime) }}</strong>
-            <button class="refresh" @click="getTrainTime()">refresh ⟳</button>
+            <Button @click="getTrainTime()" aria-label="refresh ⟳" icon="pi pi-refresh" severity="danger"/>
             <div v-for="item in trainTimes">
             <p class="trainHead">{{ item.trainName }}</p>
             <p v-for="time in item.times">{{ Math.floor((time-Date.now())/60000) }} minutes, (arrives at {{ toTime(time) }})</p>
@@ -17,13 +17,17 @@
           <details>{{ alert.alertDescriptionText }}</details>
         </div>
       </details>
+      <Button icon="pi pi-heart" aria-label="favorite stop" @click="local.addFavorite(props.stop.name, props.stop, 'train')"/>
         </div>
     </div>
 </template>
 <script setup>
+import Button from "primevue/button";
 import {watchEffect, ref} from "vue";
 import loading from "@/stores/loadingVar";
 import error from "@/stores/errorVar";
+import { localStore } from "@/stores/local";
+const local = localStore();
 const props = defineProps({
   stop: Object,
 });

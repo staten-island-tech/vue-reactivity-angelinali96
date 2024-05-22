@@ -1,15 +1,40 @@
 <template>
     <h1>MTA Transit Comparison</h1>
-    <div>
-        <p>placeholder content. this page is a work in progress. </p>
-        <p>this will store saved stops do directly compare their bus/train times. </p>
-        <p>didn't figure out how to store stuff in local mem yet</p>
+    <Sidebar v-model:visible="visible" header="favorites">
+    <Card v-for="item in local.local.favorites" style="background-color: rgb(10,10,10);">
+       <template #title>{{ item.name }}</template>
+       <template #content>
+        <Button @click="local.removeFavorite(local.local.favorites.indexOf(item))" label="remove" severity="danger"/>
+       </template>
+    </Card>
+</Sidebar>
+    <MultiSelect :placeholder="'select stops'" :selectionLimit="2" display="chip" v-model="selected" :options="local.local.favorites" optionLabel="name" optionValue="code"/>
+    <Button label="Edit Favorites" @click="visible = true"/>
+<div class="compare" v-if="selected.length === 2">
+    <div id="instance0">
+      <BusTimes :stop="selected[0].code" v-model="doneselect" instance="0" v-if="selected[0].type === 'bus'"/>
+      <TrainTimes :stop="selected[0].code" v-model="doneselect" instance="0" v-if="selected[0].type === 'train'"/>
     </div>
-
+    <div id="instance1">
+        <BusTimes :stop="selected[1].code" v-model="doneselect" instance="1" v-if="selected[1].type === 'bus'"/>
+      <TrainTimes :stop="selected[1].code" v-model="doneselect" instance="1" v-if="selected[1].type === 'train'"/>
+    </div>
+</div>
 </template>
 
 <script setup>
-import FavoriteButton from '@/components/FavoriteButton.vue';
+import { ref } from 'vue';
+import MultiSelect from 'primevue/multiselect';
+import Button from 'primevue/button';
+import Sidebar from 'primevue/sidebar';
+import Card from 'primevue/card';
+import BusTimes from '@/components/BusTimes.vue';
+import TrainTimes from '@/components/TrainTimes.vue';
+import { localStore } from '@/stores/local';
+const local = localStore();
+const selected = ref([]);
+let doneselect = ref(0);
+const visible = ref(false);
 </script>
 
 <style scoped>
@@ -18,5 +43,11 @@ h1{
     text-align: center;
     font-family: "Inconsolata", monospace;
     font-weight: bolder;
+}
+.compare{
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  max-width: 100%;
 }
 </style>
