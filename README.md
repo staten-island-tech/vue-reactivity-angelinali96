@@ -8,5 +8,6 @@ Site to compare times of buses and trains at different stops.
 - stop selection auto collapses after the first time, but you can reopen it to select a different stop
 ## Current Functionality
 - Comparison of buses and trains. 
+- Saving certain stops to local storage for quicker comparison. 
 ## future plans
 see github
