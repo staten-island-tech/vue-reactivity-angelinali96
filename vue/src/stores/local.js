@@ -18,7 +18,7 @@ export const localStore = defineStore('local', {
         this.local.favorites.push({name: name, code: {code: code, type: type}})
       },
       removeFavorite(index){
-        const part1 = this.local.favorites.slice(0, index) // not sure if this works
+        const part1 = this.local.favorites.slice(0, index)
         const part2 = this.local.favorites.slice(index+1)
         this.local.favorites = part1.concat(part2)
         console.log(this.local.favorites)
