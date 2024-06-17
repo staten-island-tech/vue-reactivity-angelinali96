@@ -1,17 +1,29 @@
 <template>
     <div>
         <div class="card" :key="componentKey">
-            <strong>{{ refreshTime.textContent }}</strong>
+            <strong>refreshed at {{ toTime(refreshTime) }}</strong>
             <Button @click="getBusTime()" aria-label="refresh ⟳" icon="pi pi-refresh" severity="danger"/>
-            <p v-for="item in busTimes" v-bind:class="item.innerText.includes('\u00A0') ? 'busHead' : 'time'">{{ item.textContent }}</p>
+            <table>
+              <tr>
+                <th>bus</th>
+                <th>time</th>
+              </tr>
+              <tr v-for="item in busTimes" :key="item">
+                <td>{{ item.PublishedLineName }} {{ item.DestinationName }}</td>
+                <td v-if="item.MonitoredCall.ExpectedArrivalTime!=undefined">{{ Math.floor((Date.parse(item.MonitoredCall.ExpectedArrivalTime)-Date.now())/60000) }} minutes (Arrives at {{ toTime(item.MonitoredCall.ExpectedArrivalTime) }}, {{ item.MonitoredCall.Extensions.Distances.StopsFromCall }} stops away)</td>
+                <td v-else>{{ Math.floor((Date.parse(item.MonitoredCall.AimedArrivalTime)-Date.now())/60000) }} minutes (Expected at {{ toTime(item.MonitoredCall.AimedArrivalTime) }}, {{ item.MonitoredCall.Extensions.Distances.StopsFromCall }} stops away)</td>
+              </tr>
+            </table>
             <details>
-        <summary>
+        <summary class="alerts">
           service alerts ({{ alerts.length }})
         </summary>
-        <p v-for="alert in alerts" class="time">{{ alert.textContent }}</p>
+        <div v-for="alert in alerts" class="time">
+          <p class="busHead">{{ alert.Summary }}</p>
+          <p v-for="line in alert.Description.split('\n')">{{ line }}</p>
+        </div>
       </details>
       <Button icon="pi pi-heart" aria-label="favorite stop" @click="local.addFavorite(props.stop.name, props.stop, 'bus')"/>
-
         </div>
     </div>
 </template>
@@ -20,6 +32,7 @@ import Button from "primevue/button";
 import {watchEffect, ref} from "vue";
 import loading from "@/stores/loadingVar";
 import { localStore } from "@/stores/local";
+import { toTime } from "@/stores/functions";
 import error from "@/stores/errorVar";
 const local = localStore();
 const props = defineProps({
@@ -31,47 +44,82 @@ const forceRerender = () => {
   componentKey.value += 1;
 };
 const proxy = 'https://corsproxy.io/?';
-let busTimes = ref([]); // store the content taht will be pushed into html
-let refreshTime = ref('');
-let alerts = ref([]);
+let busTimes = ref([]); // bus details and times
+let lineList = ref([]);
+let refreshTime = ref(''); // time of api refresh
+let alerts = ref([]); // alerts
+
+
 async function getBusTime(){ // fetch api
   if(props.stop.code === '🔍 stop selection' || props.stop.code === undefined){
     return;
   }
   let currentTime = Date.now();
-    const timeUrl = `https://bustime.mta.info/m/index?q=${props.stop.code}&cacheBreaker=${currentTime}`;
+    const timeUrl = `https://bustime.mta.info/api/2/siri/stop-monitoring.json?key=0751e36e-4a17-49a5-8dfd-292c370e1296&OperatorRef=MTA%20NYCT&MonitoringRef=MTA_${props.stop.code}&cacheBreaker=${currentTime}`;
     try{
-        const response = await fetch(proxy+timeUrl, {cache: 'reload', headers: {"Access-Control-Max-Age": 0}}); // fetch site
         loading.value = true;
-        const data = await response.text();
-        htmlDataTime(data);
+        const response = await fetch(proxy+timeUrl, {cache: 'reload'}); // fetch site
+        const data = await response.json();
+        busTimes.value = [];
+        lineList.value = [];
+        alerts.value = []; // reset
+        refreshTime.value = '';
+        processTime(data.Siri.ServiceDelivery) // manipulate the data for display
         forceRerender();
         loading.value = false;
         if(props.stop.code != '🔍 stop selection'){
           model.value++;
         }
         if(response.status != 200){
+          loading.value = true;
             throw new Error(response.statusText);
         }
     } catch (error){
+      loading.value = true;
         console.log(error, "Error Fetching Buses");
     }
 }
 watchEffect(async() =>{getBusTime();});
-function htmlDataTime(data){
-    const parser = new DOMParser();
-        const list = parser.parseFromString(data, "text/html");
-        const busTimeContainers = list.querySelectorAll('.directionAtStop'); // parse fetched site
-        busTimes = [];
-        busTimeContainers.forEach(function(item){
-            item.childNodes.forEach(function(item){
-                busTimes.push(item);
-                loading.value = false;
-            });
-        });
-        refreshTime = list.querySelector('#refresh a strong');
-      alerts = (list.querySelectorAll('.alerts li'));
+
+function processTime(data){
+    refreshTime.value = data.ResponseTimestamp; // save refresh time to var
+    if(data.SituationExchangeDelivery != undefined){
+      alerts.value = data.SituationExchangeDelivery[0].Situations.PtSituationElement; // display alerts
+    }else{
+      alerts.value = [];
     }
+    data.StopMonitoringDelivery[0].MonitoredStopVisit.forEach((item)=>{
+      busTimes.value.push(item.MonitoredVehicleJourney)
+    }
+    );
+    busTimes.value.forEach((item)=>{
+      lineList.value.push(item.PublishedLineName) 
+    });
+    lineList.value = [...new Set(lineList.value)];
+    console.log(lineList.value, 'group')
+    /* 
+    let busTimeEEE = [];
+    
+    lineList.forEach((item)=>{
+      let lineTimes = [];
+      let arr = busTimes.value.filter((el) => el.PublishedLineName == item);
+      let busDirection = '';
+      arr.forEach((item) => {
+        let arriveTime = item.MonitoredCall.ExpectedArrivalTime;
+        let minAway = Math.floor((Date.parse(arriveTime)-Date.now())/60000);
+        let arrTime = toTime(arriveTime);
+        let stopsAway = item.MonitoredCall.Extensions.Distances.StopsFromCall;
+        busDirection = item.DestinationName;
+        lineTimes.push(`${minAway} minutes (arrives at ${arrTime}, ${stopsAway} stops away)`)
+      });
+      busTimeEEE.push({
+        busName: item + ' ' + busDirection,
+        times: lineTimes
+      });
+      busTimes.value = busTimeEEE;
+    });
+    console.log(busTimes.value, data, lineList) */
+  }
   
 </script>
 <style scoped>
@@ -87,10 +135,6 @@ function htmlDataTime(data){
     box-sizing: border-box;
     box-shadow: 5px 5px 0px rgba(48, 48, 48, 0.5);
     color: white;
-}
-summary{
-  font-size: var(--h5);
-  color: rgb(250, 215, 215);
 }
 button[class="refresh"]{
   border-radius: 8px;

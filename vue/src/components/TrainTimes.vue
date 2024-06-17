@@ -5,16 +5,20 @@
             <Button @click="getTrainTime()" aria-label="refresh ⟳" icon="pi pi-refresh" severity="danger"/>
             <div v-for="item in trainTimes">
             <p class="trainHead">{{ item.trainName }}</p>
-            <p v-for="time in item.times">{{ Math.floor((time-Date.now())/60000) }} minutes, (arrives at {{ toTime(time) }})</p>
-            </div>
+            <ol>
+            <li v-for="time in item.times">{{ Math.floor((time-Date.now())/60000) }} minutes (arrives at {{ toTime(time) }})</li>
+            </ol>
+          </div>
             <details>
-        <summary>
+        <summary class="alerts">
           service alerts ({{ alerts.length }})
         </summary>
         <div v-for="alert in alerts" class="time">
           <p class="trainHead">{{ alert.humanReadableActivePeriod }}</p>
           <p>{{ alert.alertHeaderText }}</p>
-          <details>{{ alert.alertDescriptionText }}</details>
+          <details>
+            <p v-for="line in alert.alertDescriptionText.split('\n')">{{ line }}</p>
+          </details>
         </div>
       </details>
       <Button icon="pi pi-heart" aria-label="favorite stop" @click="local.addFavorite(props.stop.name, props.stop, 'train')"/>
@@ -26,6 +30,7 @@ import Button from "primevue/button";
 import {watchEffect, ref} from "vue";
 import loading from "@/stores/loadingVar";
 import error from "@/stores/errorVar";
+import { toTime } from "@/stores/functions";
 import { localStore } from "@/stores/local";
 const local = localStore();
 const props = defineProps({
@@ -39,13 +44,7 @@ const forceRerender = () => {
 let trainTimes = ref([]); // store the content that will be pushed into html
 let refreshTime = ref(0);
 let alerts = ref([]);
-function toTime(time){
-  time = new Date(time);
-  const hour = time.getHours();
-  const minute = time.getMinutes();
-  const second = time.getSeconds();
-  return `${hour}:${minute}:${second}`;
-}
+
 async function getTrainTime(){ // fetch api
   // let currentTime = Date.now(); &cacheBreaker=${currentTime}
   if(props.stop.code === '🔍 stop selection'){
@@ -53,8 +52,8 @@ async function getTrainTime(){ // fetch api
   }
     const timeUrl = `https://otp-mta-prod.camsys-apps.com/otp/routers/default/nearby?stops=${props.stop.code}&apikey=Z276E3rCeTzOQEoBPPN4JCEc6GfvdnYE`;
     try{
-        const response = await fetch(encodeURI(timeUrl), {cache: 'reload', headers: {"Access-Control-Max-Age": 0}}); // fetch site
         loading.value = true;
+        const response = await fetch(encodeURI(timeUrl), {cache: 'reload', headers: {"Access-Control-Max-Age": 0}}); // fetch site
         const data = await response.json();
         let trainTimeContainers = data[0].groups;
         alerts = data[0].alerts;
@@ -97,10 +96,6 @@ watchEffect(async() =>{getTrainTime()});
     box-sizing: border-box;
     box-shadow: 5px 5px 0px rgba(48, 48, 48, 0.5);
     color: white;
-}
-summary{
-  font-size: var(--h5);
-  color: rgb(250, 215, 215);
 }
 button[class="refresh"]{
   border-radius: 8px;

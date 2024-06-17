@@ -36,8 +36,8 @@
   watchEffect(async() => { // fetch both stops api for both arrays and display conditionally
       try{
           const stopsApi = `https://collector-otp-prod.camsys-apps.com/schedule/MTASBWY/stopsForRoute?routeId=MTASBWY:${selectedtrain.name.code}`;
-          const response = await fetch(encodeURI(stopsApi));
           loading.value = true;
+          const response = await fetch(encodeURI(stopsApi));
           const data = await response.json();
           trainstops = [];
           data.forEach(element => { // push stops into array

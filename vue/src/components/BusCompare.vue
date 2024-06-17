@@ -53,8 +53,8 @@ watchEffect(async() => { // fetch stop directions api
   }
     try{
         const direction = `https://bt.mta.info/api/search?q=${selectedbus.name}`;
-        const response = await fetch(proxy+direction);
         loading.value = true;
+        const response = await fetch(proxy+direction);
         const data = await response.json();
         let directionsResult = (data.searchResults.matches[0].directions).sort(sortDirection);
         directions = [];
@@ -84,8 +84,8 @@ watchEffect(async() => { // fetch both stops api for both arrays and display con
   }
   try{
         const stopsApi = `https://bustime.mta.info/api/stops-on-route-for-direction?routeId=MTA+NYCT_${selectedbus.name.replace(/\-SBS/, '%2B')}&directionId=`;
-        const response0 = await fetch(proxy+encodeURI(stopsApi+0));
         loading.value = true;
+        const response0 = await fetch(proxy+encodeURI(stopsApi+0));
         const response1 = await fetch(proxy+encodeURI(stopsApi+1));
         const data0 = await response0.json();
         const data1 = await response1.json();
