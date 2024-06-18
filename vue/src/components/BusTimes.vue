@@ -5,7 +5,7 @@
             <Button @click="getBusTime()" aria-label="refresh ⟳" icon="pi pi-refresh" severity="danger"/>
             <details open v-for="el in lineList" :key="el">
               <summary class="busHead">{{ el }}</summary>
-              <ol>
+              <ol class="times">
                 <li v-for="item in computeFilter(el, busTimes)" :key="item.PublishedLineName">
                   <p v-if="item.MonitoredCall.ExpectedArrivalTime!=undefined">{{ Math.floor((Date.parse(item.MonitoredCall.ExpectedArrivalTime)-Date.now())/60000) }} minutes (Arrives at {{ toTime(item.MonitoredCall.ExpectedArrivalTime) }}, {{ item.MonitoredCall.Extensions.Distances.StopsFromCall }} stops away)</p>
                   <p v-else>{{ Math.floor((Date.parse(item.MonitoredCall.AimedArrivalTime)-Date.now())/60000) }} minutes (Expected at {{ toTime(item.MonitoredCall.AimedArrivalTime) }}, {{ item.MonitoredCall.Extensions.Distances.StopsFromCall }} stops away)</p>
@@ -104,37 +104,6 @@ function computeFilter(group, element){ // separate diff buses
 
 </script>
 <style scoped>
-.card{
-    padding: 0.5rem;
-    background-color: #1a0035;
-    margin: 0.5rem 0;
-    width: 40vw;
-    height: auto;
-    text-align: center;
-    align-items: center;
-    border-radius: 15px;
-    box-sizing: border-box;
-    box-shadow: 5px 5px 0px rgba(48, 48, 48, 0.5);
-    color: white;
-}
-button[class="refresh"]{
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.5rem;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: border-color 0.25s;
-  margin: 0.5rem 0;
-  width: 14vw;
-  background-color: rgb(107, 0, 0);
-  color: white;
-}
-.busHead{
-  font-weight: bolder;
-  font-size: 1rem;
-}
 .time{
   text-align: left;
 }
