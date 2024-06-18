@@ -18,6 +18,7 @@ onMounted(() => favoriteList());
 </script>
 
 <template>
+  <ProgressSpinner v-if="loading === true" style="position: fixed;width: 50px; height: 50px" strokeWidth="8" fill="var(--surface-ground)"/>
   <header>
 
     <div class="wrapper">
@@ -29,7 +30,6 @@ onMounted(() => favoriteList());
       </nav>
     </div>
   </header>
-  <ProgressSpinner v-if="loading === true" style="position: fixed;width: 50px; height: 50px" strokeWidth="8" fill="var(--surface-ground)"/>
   <InlineMessage v-if="errorDisplay === true" severity="error" style="position: fixed;">Error loading. </InlineMessage>
   <RouterView />
   <footer>

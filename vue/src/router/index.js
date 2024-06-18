@@ -18,6 +18,11 @@ const router = createRouter({
       path: '/compare',
       name: 'compare transit',
       component: () => import('../views/ComparePage.vue')
+    },
+    {
+      path: '/*',
+      name: '404 Error',
+      component: () => import('../views/ErrorView.vue')
     }
   ]
 })

@@ -34,6 +34,11 @@ a,
   }
 }
 
+.alerts{
+  font-size: 0.9rem;
+  color: rgb(250, 215, 215);
+}
+
 /* Order */
 @layer reset, primevue;
 
