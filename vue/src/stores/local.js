@@ -21,7 +21,6 @@ export const localStore = defineStore('local', {
         const part1 = this.local.favorites.slice(0, index)
         const part2 = this.local.favorites.slice(index+1)
         this.local.favorites = part1.concat(part2)
-        console.log(this.local.favorites)
       },
       clearUser() {
         this.local = {}

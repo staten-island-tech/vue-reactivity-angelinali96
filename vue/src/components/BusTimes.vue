@@ -95,7 +95,6 @@ function processTime(data){
       lineList.value.push(item.PublishedLineName+' '+item.DestinationName) 
     });
     lineList.value = [...new Set(lineList.value)];
-    console.log(lineList.value, 'group')
   }
   
 function computeFilter(group, element){ // separate diff buses

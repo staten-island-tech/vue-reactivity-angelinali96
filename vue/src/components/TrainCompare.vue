@@ -48,7 +48,6 @@
           });
           forceRerender();
           loading.value = false;
-          console.log(trainstops);
           if(response.status != 200){
               throw new Error(response.statusText);
           }

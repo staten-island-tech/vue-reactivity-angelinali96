@@ -38,7 +38,6 @@ const selectedstop = ref({name: '🔍 stop selection', code: '🔍 stop selectio
 let selectedbus = reactive({}); // variable for current selected bus
 let doneselect = ref(0);
 function receiveData(id){
-      // console.log(id);
       selectedbus.name = id; // receives emit and sets object equal to emit value
     }
 
