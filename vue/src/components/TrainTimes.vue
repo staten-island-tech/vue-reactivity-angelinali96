@@ -3,13 +3,13 @@
         <div class="card" :key="componentKey">
             <strong>refreshed at {{ toTime(refreshTime) }}</strong>
             <Button @click="getTrainTime()" aria-label="refresh ⟳" icon="pi pi-refresh" severity="danger"/>
-            <div v-for="item in trainTimes">
-            <p class="trainHead">{{ item.trainName }}</p>
+            <details open v-for="item in trainTimes">
+            <summary class="trainHead">{{ item.trainName }}</summary>
             <ol>
             <li v-for="time in item.times">{{ Math.floor((time-Date.now())/60000) }} minutes (arrives at {{ toTime(time) }})</li>
             </ol>
-          </div>
-            <details>
+          </details>
+            <details v-if="alerts.length > 0">
         <summary class="alerts">
           service alerts ({{ alerts.length }})
         </summary>
@@ -17,7 +17,8 @@
           <p class="trainHead">{{ alert.humanReadableActivePeriod }}</p>
           <p>{{ alert.alertHeaderText }}</p>
           <details>
-            <p v-for="line in alert.alertDescriptionText.split('\n')">{{ line }}</p>
+            <!-- <p v-for="line in (alert.alertDescriptionText)">{{ line }}</p> -->
+             <p style="white-space: pre-wrap;">{{ alert.alertDescriptionText }}</p>
           </details>
         </div>
       </details>
@@ -81,7 +82,7 @@ async function getTrainTime(){ // fetch api
     }
 }
 watchEffect(async() =>{getTrainTime()});
-  
+
 </script>
 <style scoped>
 .card{

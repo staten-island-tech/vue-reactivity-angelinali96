@@ -8,7 +8,7 @@
        </template>
     </Card>
 </Sidebar>
-    <MultiSelect :placeholder="'select stops'" :selectionLimit="2" display="chip" v-model="selected" :options="local.local.favorites" optionLabel="name" optionValue="code"/>
+    <MultiSelect :placeholder="'select stops'" :selectionLimit="2" :maxSelectedLabels="2" display="chip" v-model="selected" :options="local.local.favorites" optionLabel="name" optionValue="code" class="w-full md:w-80"/>
     <Button label="Edit Favorites" @click="visible = true"/>
 <div class="compare" v-if="selected.length === 2">
     <div id="instance0">

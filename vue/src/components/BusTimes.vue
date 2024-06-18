@@ -3,18 +3,17 @@
         <div class="card" :key="componentKey">
             <strong>refreshed at {{ toTime(refreshTime) }}</strong>
             <Button @click="getBusTime()" aria-label="refresh ⟳" icon="pi pi-refresh" severity="danger"/>
-            <table>
-              <tr>
-                <th>bus</th>
-                <th>time</th>
-              </tr>
-              <tr v-for="item in busTimes" :key="item">
-                <td>{{ item.PublishedLineName }} {{ item.DestinationName }}</td>
-                <td v-if="item.MonitoredCall.ExpectedArrivalTime!=undefined">{{ Math.floor((Date.parse(item.MonitoredCall.ExpectedArrivalTime)-Date.now())/60000) }} minutes (Arrives at {{ toTime(item.MonitoredCall.ExpectedArrivalTime) }}, {{ item.MonitoredCall.Extensions.Distances.StopsFromCall }} stops away)</td>
-                <td v-else>{{ Math.floor((Date.parse(item.MonitoredCall.AimedArrivalTime)-Date.now())/60000) }} minutes (Expected at {{ toTime(item.MonitoredCall.AimedArrivalTime) }}, {{ item.MonitoredCall.Extensions.Distances.StopsFromCall }} stops away)</td>
-              </tr>
-            </table>
-            <details>
+            <details open v-for="el in lineList" :key="el">
+              <summary class="busHead">{{ el }}</summary>
+              <ol>
+                <li v-for="item in computeFilter(el, busTimes)" :key="item.PublishedLineName">
+                  <p v-if="item.MonitoredCall.ExpectedArrivalTime!=undefined">{{ Math.floor((Date.parse(item.MonitoredCall.ExpectedArrivalTime)-Date.now())/60000) }} minutes (Arrives at {{ toTime(item.MonitoredCall.ExpectedArrivalTime) }}, {{ item.MonitoredCall.Extensions.Distances.StopsFromCall }} stops away)</p>
+                  <p v-else>{{ Math.floor((Date.parse(item.MonitoredCall.AimedArrivalTime)-Date.now())/60000) }} minutes (Expected at {{ toTime(item.MonitoredCall.AimedArrivalTime) }}, {{ item.MonitoredCall.Extensions.Distances.StopsFromCall }} stops away)</p>
+                </li>
+              </ol>
+              
+            </details>
+            <details v-if="alerts.length > 0">
         <summary class="alerts">
           service alerts ({{ alerts.length }})
         </summary>
@@ -23,7 +22,7 @@
           <p v-for="line in alert.Description.split('\n')">{{ line }}</p>
         </div>
       </details>
-      <Button icon="pi pi-heart" aria-label="favorite stop" @click="local.addFavorite(props.stop.name, props.stop, 'bus')"/>
+      <Button icon="pi pi-heart" aria-label="favorite stop" @click="local.addFavorite(`${props.stop.name} (${busTimes[0].DestinationName})`, props.stop, 'bus')"/>
         </div>
     </div>
 </template>
@@ -93,34 +92,17 @@ function processTime(data){
     }
     );
     busTimes.value.forEach((item)=>{
-      lineList.value.push(item.PublishedLineName) 
+      lineList.value.push(item.PublishedLineName+' '+item.DestinationName) 
     });
     lineList.value = [...new Set(lineList.value)];
     console.log(lineList.value, 'group')
-    /* 
-    let busTimeEEE = [];
-    
-    lineList.forEach((item)=>{
-      let lineTimes = [];
-      let arr = busTimes.value.filter((el) => el.PublishedLineName == item);
-      let busDirection = '';
-      arr.forEach((item) => {
-        let arriveTime = item.MonitoredCall.ExpectedArrivalTime;
-        let minAway = Math.floor((Date.parse(arriveTime)-Date.now())/60000);
-        let arrTime = toTime(arriveTime);
-        let stopsAway = item.MonitoredCall.Extensions.Distances.StopsFromCall;
-        busDirection = item.DestinationName;
-        lineTimes.push(`${minAway} minutes (arrives at ${arrTime}, ${stopsAway} stops away)`)
-      });
-      busTimeEEE.push({
-        busName: item + ' ' + busDirection,
-        times: lineTimes
-      });
-      busTimes.value = busTimeEEE;
-    });
-    console.log(busTimes.value, data, lineList) */
   }
   
+function computeFilter(group, element){ // separate diff buses
+  let match =  group.replace(/\s.*/, '');
+  return element.filter((el) => el.PublishedLineName === match);
+}
+
 </script>
 <style scoped>
 .card{
