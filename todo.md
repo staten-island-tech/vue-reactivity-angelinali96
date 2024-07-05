@@ -3,11 +3,12 @@
 - add path train time
 - add nice bus time
 - add ferry times
+ - https://www.nywaterway.com/FerryRoutesSchedules.aspx https://siferry.com/schedules/
 - options for other apis
-- system for averaging wait times for a certain time
+- machine learning for wait times for a certain time/location
   - compare current wait time to scheduled time
-  - collect real time data over course of 3 months & avg wait
 
 # issues
 - deployed version on netlify will load routerview tab, but if the same page is reloaded it will display a site not found
 - no validation for whether or not stop was already added to favorites but that doesn't really impact usage
+- some more obscure bus lines are not accessible
