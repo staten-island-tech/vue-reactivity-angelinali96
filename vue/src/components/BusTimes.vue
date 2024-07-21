@@ -1,14 +1,16 @@
 <template>
     <div>
         <div class="card" :key="componentKey">
-            <strong>refreshed at {{ toTime(refreshTime) }}</strong>
-            <Button @click="getBusTime()" aria-label="refresh ⟳" icon="pi pi-refresh" severity="danger"/>
+            <Button @click="getBusTime()" aria-label="refresh ⟳" icon="pi pi-refresh" severity="danger" style="margin-right: 0.3rem;"/>
+            <strong>refreshed {{ toTime(refreshTime) }}</strong>
             <details open v-for="el in lineList" :key="el">
               <summary class="busHead">{{ el }}</summary>
               <ol class="times">
                 <li v-for="item in computeFilter(el, busTimes)" :key="item.PublishedLineName">
-                  <p v-if="item.MonitoredCall.ExpectedArrivalTime!=undefined">{{ Math.floor((Date.parse(item.MonitoredCall.ExpectedArrivalTime)-Date.now())/60000) }} minutes (Arrives at {{ toTime(item.MonitoredCall.ExpectedArrivalTime) }}, {{ item.MonitoredCall.Extensions.Distances.StopsFromCall }} stops away)</p>
-                  <p v-else>{{ Math.floor((Date.parse(item.MonitoredCall.AimedArrivalTime)-Date.now())/60000) }} minutes (Expected at {{ toTime(item.MonitoredCall.AimedArrivalTime) }}, {{ item.MonitoredCall.Extensions.Distances.StopsFromCall }} stops away)</p>
+                  <p v-if="item.MonitoredCall.ExpectedArrivalTime!=undefined">{{ Math.floor((Date.parse(item.MonitoredCall.ExpectedArrivalTime)-Date.now())/60000) }} minutes (Arrives {{ toTime(item.MonitoredCall.ExpectedArrivalTime) }})</p>
+                  <p v-else style="color: lightgray">{{ Math.floor((Date.parse(item.MonitoredCall.AimedArrivalTime)-Date.now())/60000) }} minutes (Expected {{ toTime(item.MonitoredCall.AimedArrivalTime) }})</p>
+                  <p v-if="stopDistance == true">{{ item.MonitoredCall.Extensions.Distances.StopsFromCall }} stops away</p>
+                  <p v-if="item.MonitoredCall.Extensions.Capacities != null  && showPplOn == true">people on board: {{ item.MonitoredCall.Extensions.Capacities.EstimatedPassengerCount }}</p>
                 </li>
               </ol>
               
@@ -22,12 +24,19 @@
           <p v-for="line in alert.Description.split('\n')">{{ line }}</p>
         </div>
       </details>
+      <div style="display: flex;">
       <Button icon="pi pi-heart" aria-label="favorite stop" @click="local.addFavorite(`${props.stop.name} (${busTimes[0].DestinationName})`, props.stop, 'bus')"/>
-        </div>
+      <div style="display: flex;flex-direction: column;">
+      <label for="stops" style="padding: 0.3rem;"><Checkbox inputId="stops" v-model="stopDistance" :binary="true"/>show stops</label>
+      <label for="pplOn" style="padding: 0.3rem;"><Checkbox inputId="pplOn" v-model="showPplOn" :binary="true"/>show people on board</label>
+    </div>
+  </div>
+    </div>
     </div>
 </template>
 <script setup>
 import Button from "primevue/button";
+import Checkbox from "primevue/checkbox";
 import {watchEffect, ref} from "vue";
 import loading from "@/stores/loadingVar";
 import { localStore } from "@/stores/local";
@@ -98,9 +107,13 @@ function processTime(data){
   }
   
 function computeFilter(group, element){ // separate diff buses
-  let match =  group.replace(/\s.*/, '');
-  return element.filter((el) => el.PublishedLineName === match);
+  let lineMatch =  group.replace(/\s.*/, '');
+  let destinationMatch = group.replace(/.*?\s/, '');
+  return element.filter((el) => el.PublishedLineName === lineMatch && el.DestinationName === destinationMatch);
 }
+
+const showPplOn = ref(false)
+const stopDistance = ref(true)
 
 </script>
 <style scoped>
