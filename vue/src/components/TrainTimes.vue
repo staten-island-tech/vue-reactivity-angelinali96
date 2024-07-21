@@ -1,12 +1,12 @@
 <template>
     <div>
         <div class="card" :key="componentKey">
-            <strong>refreshed at {{ toTime(refreshTime) }}</strong>
-            <Button @click="getTrainTime()" aria-label="refresh ⟳" icon="pi pi-refresh" severity="danger"/>
+            <Button @click="getTrainTime()" aria-label="refresh ⟳" icon="pi pi-refresh" severity="danger" style="margin-right: 0.3rem;"/>
+            <strong>refreshed {{ toTime(refreshTime) }}</strong>
             <details open v-for="item in trainTimes">
             <summary class="trainHead">{{ item.trainName }}</summary>
             <ol class="times">
-            <li v-for="time in item.times">{{ Math.floor((time-Date.now())/60000) }} minutes (arrives at {{ toTime(time) }})</li>
+            <li v-for="time in item.times">{{ Math.floor((time-Date.now())/60000) }} minutes (arrives {{ toTime(time) }})</li>
             </ol>
           </details>
             <details v-if="alerts.length > 0">

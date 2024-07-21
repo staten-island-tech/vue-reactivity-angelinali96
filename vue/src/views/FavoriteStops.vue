@@ -8,16 +8,12 @@
        </template>
     </Card>
 </Sidebar>
-    <MultiSelect :placeholder="'select stops'" :selectionLimit="2" :maxSelectedLabels="2" display="chip" v-model="selected" :options="local.local.favorites" optionLabel="name" optionValue="code" class="w-full md:w-80"/>
+    <MultiSelect :placeholder="'select stops'" display="chip" v-model="selected" :options="local.local.favorites" optionLabel="name" optionValue="code" class="w-full md:w-80"/>
     <Button label="Edit Favorites" @click="visible = true"/>
-<div class="compare" v-if="selected.length === 2">
-    <div id="instance0">
-      <BusTimes :stop="selected[0].code" v-model="doneselect" instance="0" v-if="selected[0].type === 'bus'"/>
-      <TrainTimes :stop="selected[0].code" v-model="doneselect" instance="0" v-if="selected[0].type === 'train'"/>
-    </div>
-    <div id="instance1">
-        <BusTimes :stop="selected[1].code" v-model="doneselect" instance="1" v-if="selected[1].type === 'bus'"/>
-      <TrainTimes :stop="selected[1].code" v-model="doneselect" instance="1" v-if="selected[1].type === 'train'"/>
+<div class="compare">
+    <div v-for="select in selected" :id="`instance${selected.indexOf(select)}`" style="padding:0.5rem;">
+      <BusTimes :stop="selected[selected.indexOf(select)].code" v-model="doneselect" :instance="selected.indexOf(select)" v-if="selected[selected.indexOf(select)].type === 'bus'"/>
+      <TrainTimes :stop="selected[selected.indexOf(select)].code" v-model="doneselect" :instance="selected.indexOf(select)" v-if="selected[selected.indexOf(select)].type === 'train'"/>
     </div>
 </div>
 </template>
@@ -47,7 +43,5 @@ h1{
 .compare{
   display: flex;
   justify-content: space-around;
-  flex-wrap: wrap;
-  max-width: 100%;
 }
 </style>
