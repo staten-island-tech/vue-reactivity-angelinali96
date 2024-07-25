@@ -8,13 +8,11 @@
        </template>
     </Card>
 </Sidebar>
-    <MultiSelect :placeholder="'select stops'" display="chip" v-model="selected" :options="local.local.favorites" optionLabel="name" optionValue="code" class="w-full md:w-80"/>
+    <MultiSelect :maxSelectedLabels="0" :placeholder="'select stops'" v-model="selected" :options="local.local.favorites" optionLabel="name" optionValue="code" class="w-full md:w-80"/>
     <Button label="Edit Favorites" @click="visible = true"/>
 <div class="compare">
     <div v-for="select in selected" :id="`instance${selected.indexOf(select)}`" style="padding:0.5rem; width: 42vw;">
-      <Divider>
-        <p>{{ select.code.name }}</p>
-      </Divider>
+      <p style="text-align: center; font-size: 1rem;">{{ select.code.name }}</p>
       <BusTimes :stop="selected[selected.indexOf(select)].code" v-model="doneselect" :instance="selected.indexOf(select)" v-if="selected[selected.indexOf(select)].type === 'bus'"/>
       <TrainTimes :stop="selected[selected.indexOf(select)].code" v-model="doneselect" :instance="selected.indexOf(select)" v-if="selected[selected.indexOf(select)].type === 'train'"/>
     </div>
@@ -26,7 +24,6 @@ import { ref } from 'vue';
 import MultiSelect from 'primevue/multiselect';
 import Button from 'primevue/button';
 import Sidebar from 'primevue/sidebar';
-import Divider from 'primevue/divider';
 import Card from 'primevue/card';
 import BusTimes from '@/components/BusTimes.vue';
 import TrainTimes from '@/components/TrainTimes.vue';
