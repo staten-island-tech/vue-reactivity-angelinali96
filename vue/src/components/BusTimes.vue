@@ -11,6 +11,7 @@
                   <p v-else style="color: lightgray">{{ Math.floor((Date.parse(item.MonitoredCall.AimedArrivalTime)-Date.now())/60000) }} minutes (Expected {{ toTime(item.MonitoredCall.AimedArrivalTime) }})</p>
                   <p v-if="stopDistance == true">{{ item.MonitoredCall.Extensions.Distances.StopsFromCall }} stops away</p>
                   <p v-if="item.MonitoredCall.Extensions.Capacities != null  && showPplOn == true">people on board: {{ item.MonitoredCall.Extensions.Capacities.EstimatedPassengerCount }}</p>
+                  <p v-if="item.VehicleRef != null  && showBusNum == true">{{ item.VehicleRef.replace('MTA NYCT_', 'bus ') }}</p>
                 </li>
               </ol>
               
@@ -29,6 +30,7 @@
       <div style="display: flex;flex-direction: column;">
       <label for="stops" style="padding: 0.3rem;"><Checkbox inputId="stops" v-model="stopDistance" :binary="true"/>show stops</label>
       <label for="pplOn" style="padding: 0.3rem;"><Checkbox inputId="pplOn" v-model="showPplOn" :binary="true"/>show people on board</label>
+      <label for="BusNum" style="padding: 0.3rem;"><Checkbox inputId="BusNum" v-model="showBusNum" :binary="true"/>show bus number</label>
     </div>
   </div>
     </div>
@@ -114,6 +116,7 @@ function computeFilter(group, element){ // separate diff buses
 
 const showPplOn = ref(false)
 const stopDistance = ref(true)
+const showBusNum = ref(false)
 
 </script>
 <style scoped>

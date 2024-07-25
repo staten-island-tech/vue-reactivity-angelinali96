@@ -8,10 +8,11 @@
        </template>
     </Card>
 </Sidebar>
-    <MultiSelect :placeholder="'select stops'" display="chip" v-model="selected" :options="local.local.favorites" optionLabel="name" optionValue="code" class="w-full md:w-80"/>
+    <MultiSelect :maxSelectedLabels="0" :placeholder="'select stops'" v-model="selected" :options="local.local.favorites" optionLabel="name" optionValue="code" class="w-full md:w-80"/>
     <Button label="Edit Favorites" @click="visible = true"/>
 <div class="compare">
-    <div v-for="select in selected" :id="`instance${selected.indexOf(select)}`" style="padding:0.5rem;">
+    <div v-for="select in selected" :id="`instance${selected.indexOf(select)}`" style="padding:0.5rem; width: 42vw;">
+      <p style="text-align: center; font-size: 1rem;">{{ select.code.name }}</p>
       <BusTimes :stop="selected[selected.indexOf(select)].code" v-model="doneselect" :instance="selected.indexOf(select)" v-if="selected[selected.indexOf(select)].type === 'bus'"/>
       <TrainTimes :stop="selected[selected.indexOf(select)].code" v-model="doneselect" :instance="selected.indexOf(select)" v-if="selected[selected.indexOf(select)].type === 'train'"/>
     </div>
