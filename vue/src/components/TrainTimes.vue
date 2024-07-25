@@ -22,7 +22,7 @@
           </details>
         </div>
       </details>
-      <Button icon="pi pi-heart" aria-label="favorite stop" @click="local.addFavorite(props.stop.name, props.stop, 'train')"/>
+      <Button icon="pi pi-heart" aria-label="favorite stop" @click="local.addFavorite(`${props.stop.name} (${trainNums.toString()})`, props.stop, 'train')"/>
         </div>
     </div>
 </template>
@@ -45,6 +45,11 @@ const forceRerender = () => {
 let trainTimes = ref([]); // store the content that will be pushed into html
 let refreshTime = ref(0);
 let alerts = ref([]);
+let trainNums = ref([]);
+
+function removeDupes(data){
+  return data.filter((value, index)=> data.indexOf(value) === index)
+}
 
 async function getTrainTime(){ // fetch api
   // let currentTime = Date.now(); &cacheBreaker=${currentTime}
@@ -61,6 +66,7 @@ async function getTrainTime(){ // fetch api
         refreshTime = (data[0].groups[0].times[0].timestamp)*1000;
         trainTimes = [];
         trainTimeContainers.forEach(function(item){
+          trainNums.value.push(item.route.shortName)
           const group = {};
           group.trainName = item.route.shortName +' - '+ item.headsign;
           group.times = [];
@@ -69,6 +75,8 @@ async function getTrainTime(){ // fetch api
           });
           trainTimes.push(group);
         });
+        trainNums.value = removeDupes(trainNums.value)
+        console.log(trainNums.value)
         if(props.stop.code != '🔍 stop selection'){
           model.value++;
         }
