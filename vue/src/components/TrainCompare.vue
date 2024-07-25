@@ -60,12 +60,6 @@
   .train{
     width: 49%;
   }
-  .switch{
-    width: fit-content;
-    display: flex;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
   [data-pc-name='dropdown']{
     width: 40vw;
   }

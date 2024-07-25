@@ -13,8 +13,8 @@
 <div class="compare">
     <div v-for="select in selected" :id="`instance${selected.indexOf(select)}`" style="padding:0.5rem; width: 42vw;">
       <p style="text-align: center; font-size: 1rem;">{{ select.code.name }}</p>
-      <BusTimes :stop="selected[selected.indexOf(select)].code" v-model="doneselect" :instance="selected.indexOf(select)" v-if="selected[selected.indexOf(select)].type === 'bus'"/>
-      <TrainTimes :stop="selected[selected.indexOf(select)].code" v-model="doneselect" :instance="selected.indexOf(select)" v-if="selected[selected.indexOf(select)].type === 'train'"/>
+      <BusTimes :stop="select.code" v-model="doneselect" :instance="selected.indexOf(select)" v-if="select.type === 'bus'"/>
+      <TrainTimes :stop="select.code" v-model="doneselect" :instance="selected.indexOf(select)" v-if="select.type === 'train'"/>
     </div>
 </div>
 </template>
@@ -44,5 +44,6 @@ h1{
 .compare{
   display: flex;
   justify-content: space-around;
+  overflow-x: auto;
 }
 </style>

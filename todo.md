@@ -7,8 +7,8 @@
 - options for other apis
 - machine learning for wait times for a certain time/location
   - compare current wait time to scheduled time
+- display locations of transport on a map
 
 # issues
-- deployed version on netlify will load routerview tab, but if the same page is reloaded it will display a site not found
 - no validation for whether or not stop was already added to favorites but that doesn't really impact usage
 - some more obscure bus lines are not accessible
