@@ -20,7 +20,7 @@ const router = createRouter({
       component: () => import('../views/ComparePage.vue')
     },
     {
-      path: '/*',
+      path: '/:pathMatch(.*)*',
       name: '404 Error',
       component: () => import('../views/ErrorView.vue')
     }
