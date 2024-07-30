@@ -44,7 +44,7 @@ h1{
 .compare{
   display: flex;
   justify-content: space-around;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden;
   max-width: 100%;
   width: 100%;
