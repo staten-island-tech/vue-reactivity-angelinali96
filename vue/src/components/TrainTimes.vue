@@ -65,6 +65,7 @@ async function getTrainTime(){ // fetch api
         alerts = data[0].alerts;
         refreshTime = (data[0].groups[0].times[0].timestamp)*1000;
         trainTimes = [];
+        trainNums.value = [];
         trainTimeContainers.forEach(function(item){
           trainNums.value.push(item.route.shortName)
           const group = {};
