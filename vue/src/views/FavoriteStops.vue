@@ -45,5 +45,6 @@ h1{
   display: flex;
   justify-content: space-around;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 </style>
