@@ -26,7 +26,7 @@
         </div>
       </details>
       <div style="display: flex;">
-      <Button icon="pi pi-heart" aria-label="favorite stop" @click="local.addFavorite(`${props.stop.name} (${busTimes[0].DestinationName})`, props.stop, 'bus')"/>
+      <SelectButton style="filter: sepia(100%) hue-rotate(270deg) brightness(150%);" v-model="favStatus" :options="['❤️']" :disabled="favDisabled"/>
       <div style="display: flex;flex-direction: column;">
       <label for="stops" style="padding: 0.3rem;"><Checkbox inputId="stops" v-model="stopDistance" :binary="true"/>show stops</label>
       <label for="pplOn" style="padding: 0.3rem;"><Checkbox inputId="pplOn" v-model="showPplOn" :binary="true"/>show people on board</label>
@@ -38,8 +38,9 @@
 </template>
 <script setup>
 import Button from "primevue/button";
+import SelectButton from "primevue/selectbutton";
 import Checkbox from "primevue/checkbox";
-import {watchEffect, ref} from "vue";
+import {watchEffect, ref, watch} from "vue";
 import loading from "@/stores/loadingVar";
 import { localStore } from "@/stores/local";
 import { toTime } from "@/stores/functions";
@@ -58,7 +59,8 @@ let busTimes = ref([]); // bus details and times
 let lineList = ref([]);
 let refreshTime = ref(''); // time of api refresh
 let alerts = ref([]); // alerts
-
+let favStatus = ref('');
+let favDisabled = ref(false);
 
 async function getBusTime(){ // fetch api
   if(props.stop.code === '🔍 stop selection' || props.stop.code === undefined){
@@ -77,6 +79,8 @@ async function getBusTime(){ // fetch api
         processTime(data.Siri.ServiceDelivery) // manipulate the data for display
         forceRerender();
         loading.value = false;
+        determineFav();
+        watch(favStatus, ()=> addFav());
         if(props.stop.code != '🔍 stop selection'){
           model.value++;
         }
@@ -112,6 +116,25 @@ function computeFilter(group, element){ // separate diff buses
   let lineMatch =  group.replace(/\s.*/, '');
   let destinationMatch = group.replace(/.*?\s/, '');
   return element.filter((el) => el.PublishedLineName === lineMatch && el.DestinationName === destinationMatch);
+}
+
+function determineFav(){
+  let searchArr = [];
+  local.local.favorites.forEach(item => searchArr.push(item.code.code.code))
+  if(searchArr.indexOf(props.stop.code) != -1){
+  favStatus.value = '❤️'
+  favDisabled.value = true;
+}else if(searchArr.indexOf(props.stop.code) === -1){
+  favStatus.value = ''
+  favDisabled.value = false;
+}
+}
+
+function addFav(){
+  if(favStatus.value === '❤️' && favDisabled.value === false){
+    local.addFavorite(`${props.stop.name} (${busTimes.value[0].DestinationName})`, props.stop, 'bus')
+    favDisabled.value = true;
+  }
 }
 
 const showPplOn = ref(false)

@@ -22,13 +22,14 @@
           </details>
         </div>
       </details>
-      <Button icon="pi pi-heart" aria-label="favorite stop" @click="local.addFavorite(`${props.stop.name} (${trainNums.toString()})`, props.stop, 'train')"/>
-        </div>
+      <SelectButton style="filter: sepia(100%) hue-rotate(270deg) brightness(150%);" v-model="favStatus" :options="['❤️']" :disabled="favDisabled"/>
+    </div>
     </div>
 </template>
 <script setup>
 import Button from "primevue/button";
-import {watchEffect, ref} from "vue";
+import SelectButton from "primevue/selectbutton";
+import {watchEffect, ref, watch} from "vue";
 import loading from "@/stores/loadingVar";
 import error from "@/stores/errorVar";
 import { toTime } from "@/stores/functions";
@@ -46,6 +47,27 @@ let trainTimes = ref([]); // store the content that will be pushed into html
 let refreshTime = ref(0);
 let alerts = ref([]);
 let trainNums = ref([]);
+let favStatus = ref('');
+let favDisabled = ref(false);
+
+function determineFav(){
+  let searchArr = [];
+  local.local.favorites.forEach(item => searchArr.push(item.code.code.code))
+  if(searchArr.indexOf(props.stop.code) != -1){
+  favStatus.value = '❤️'
+  favDisabled.value = true;
+}else if(searchArr.indexOf(props.stop.code) === -1){
+  favStatus.value = ''
+  favDisabled.value = false;
+}
+}
+
+function addFav(){
+  if(favStatus.value === '❤️' && favDisabled.value === false){
+    local.addFavorite(`${props.stop.name} (${trainNums.value.toString()})`, props.stop, 'train')
+    favDisabled.value = true;
+  }
+}
 
 function removeDupes(data){
   return data.filter((value, index)=> data.indexOf(value) === index)
@@ -77,12 +99,13 @@ async function getTrainTime(){ // fetch api
           trainTimes.push(group);
         });
         trainNums.value = removeDupes(trainNums.value)
-        console.log(trainNums.value)
         if(props.stop.code != '🔍 stop selection'){
           model.value++;
         }
         forceRerender();
         loading.value = false;
+        determineFav();
+        watch(favStatus, ()=> addFav());
         if(response.status != 200){
             throw new Error(response.statusText);
         }
@@ -91,7 +114,6 @@ async function getTrainTime(){ // fetch api
     }
 }
 watchEffect(async() =>{getTrainTime()});
-
 </script>
 <style scoped>
 .time{

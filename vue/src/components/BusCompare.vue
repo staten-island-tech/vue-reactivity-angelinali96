@@ -15,7 +15,7 @@
         </div>
         </AccordionTab>
       </Accordion>
-        <BusTimes :stop="selectedstop" v-model="doneselect"/>
+        <BusTimes :stop="selectedstop" v-model="doneselect" v-if="componentKey > 0"/>
         </div>
 </template>
 <script setup>

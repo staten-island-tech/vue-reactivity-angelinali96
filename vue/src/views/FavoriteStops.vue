@@ -4,12 +4,12 @@
     <Card v-for="item in local.local.favorites" style="background-color: rgb(10,10,10);">
        <template #title>{{ item.name }}</template>
        <template #content>
-        <Button @click="local.removeFavorite(local.local.favorites.indexOf(item))" label="remove" severity="danger"/>
+        <Button icon="pi pi-trash" @click="local.removeFavorite(local.local.favorites.indexOf(item))" label="remove" severity="danger"/>
        </template>
     </Card>
 </Sidebar>
     <MultiSelect :maxSelectedLabels="0" :placeholder="'select stops'" v-model="selected" :options="local.local.favorites" optionLabel="name" optionValue="code" class="w-full md:w-80"/>
-    <Button label="Edit Favorites" @click="visible = true"/>
+    <Button label="Edit Favorites" @click="visible = true" icon="pi pi-pen-to-square"/>
 <div class="compare">
     <div v-for="select in selected" :id="`instance${selected.indexOf(select)}`" style="padding:0.5rem; width: 42vw;">
       <p style="text-align: center; font-size: 1rem;">{{ select.code.name }}</p>
