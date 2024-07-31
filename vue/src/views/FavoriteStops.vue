@@ -10,7 +10,7 @@
 </Sidebar>
     <MultiSelect :maxSelectedLabels="0" :placeholder="'select stops'" v-model="selected" :options="local.local.favorites" optionLabel="name" optionValue="code" class="w-full md:w-80"/>
     <Button label="Edit Favorites" @click="visible = true" icon="pi pi-pen-to-square"/>
-<div class="compare">
+<div class="compare" :style="`width: ${favWidth}vw;`">
     <div v-for="select in selected" :id="`instance${selected.indexOf(select)}`" style="padding:0.5rem; width: 42vw;">
       <p style="text-align: center; font-size: 1rem;">{{ select.code.name }}</p>
       <BusTimes :stop="select.code" v-model="doneselect" :instance="selected.indexOf(select)" v-if="select.type === 'bus'"/>
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import MultiSelect from 'primevue/multiselect';
 import Button from 'primevue/button';
 import Sidebar from 'primevue/sidebar';
@@ -32,6 +32,11 @@ const local = localStore();
 const selected = ref([]);
 let doneselect = ref(0);
 const visible = ref(false);
+let favWidth = ref(50);
+watch(selected, () => {
+  favWidth.value = 50*selected.value.length;
+  console.log(favWidth.value)
+});
 </script>
 
 <style scoped>
@@ -46,7 +51,5 @@ h1{
   justify-content: space-around;
   overflow-x: auto;
   overflow-y: hidden;
-  max-width: 100%;
-  width: 100%;
 }
 </style>
