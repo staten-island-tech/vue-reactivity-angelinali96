@@ -11,24 +11,27 @@
           </details>
             <details v-if="alerts.length > 0">
         <summary class="alerts">
-          service alerts ({{ alerts.length }})
+          alerts ({{ alerts.length }})
         </summary>
         <div v-for="alert in alerts" class="time">
-          <p class="trainHead">{{ alert.humanReadableActivePeriod }}</p>
-          <p>{{ alert.alertHeaderText }}</p>
-          <details>
-            <!-- <p v-for="line in (alert.alertDescriptionText)">{{ line }}</p> -->
-             <p style="white-space: pre-wrap;">{{ alert.alertDescriptionText }}</p>
-          </details>
-        </div>
+          <Button style="margin-top: 0.3rem;" @click="seeAlert(alert)" :label="((alert.alertHeaderText.match(/\[(.*)\]/g)).join()) +' '+ dayMonth(alert)"></Button>
+      </div>
       </details>
       <SelectButton style="filter: sepia(100%) hue-rotate(270deg) brightness(150%);" v-model="favStatus" :options="['❤️']" :disabled="favDisabled"/>
     </div>
     </div>
+    <Dialog style="width: 60vw;" modal v-model:visible="alertvisible" :header="currentAlert.humanReadableActivePeriod">
+          <p>{{ currentAlert.alertHeaderText }}</p>
+            <details>
+            <!-- <p v-for="lines in (alert.alertDescriptionText)">{{ line }}</p> -->
+             <p style="white-space: pre-wrap;">{{ currentAlert.alertDescriptionText }}</p>
+          </details>
+          </Dialog>
 </template>
 <script setup>
 import Button from "primevue/button";
 import SelectButton from "primevue/selectbutton";
+import Dialog from "primevue/dialog";
 import {watchEffect, ref, watch} from "vue";
 import loading from "@/stores/loadingVar";
 import error from "@/stores/errorVar";
@@ -49,6 +52,18 @@ let alerts = ref([]);
 let trainNums = ref([]);
 let favStatus = ref('');
 let favDisabled = ref(false);
+let alertvisible = ref(false);
+let currentAlert = ref({});
+
+function dayMonth(alert){
+  let time = new Date(alert.effectiveStartDate);
+  return (time.getMonth()+1)+'/'+time.getDate();
+}
+
+function seeAlert(alert){
+  currentAlert.value = alert;
+  alertvisible.value = true;
+}
 
 function determineFav(){
   let searchArr = [];

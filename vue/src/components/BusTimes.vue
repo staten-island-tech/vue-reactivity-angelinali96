@@ -21,8 +21,7 @@
           service alerts ({{ alerts.length }})
         </summary>
         <div v-for="alert in alerts" class="time">
-          <p class="busHead">{{ alert.Summary }}</p>
-          <p v-for="line in alert.Description.split('\n')">{{ line }}</p>
+          <Button style="margin-top: 0.3rem;" @click="seeAlert(alert)" :label="(alert.Summary.match(/[B|M|Q|X|S|BM|Bx|BxM|QM|SIM]\d+/g)).toString()"></Button>
         </div>
       </details>
       <div style="display: flex;">
@@ -35,9 +34,14 @@
   </div>
     </div>
     </div>
+    <Dialog style="width: 60vw;" modal v-model:visible="alertvisible" :header="currentAlert.Summary">
+          <p>{{ currentAlert.alertHeaderText }}</p>
+              <p v-for="line in currentAlert.Description.split('\n')">{{ line }}</p>
+          </Dialog>
 </template>
 <script setup>
 import Button from "primevue/button";
+import Dialog from "primevue/dialog";
 import SelectButton from "primevue/selectbutton";
 import Checkbox from "primevue/checkbox";
 import {watchEffect, ref, watch} from "vue";
@@ -61,6 +65,14 @@ let refreshTime = ref(''); // time of api refresh
 let alerts = ref([]); // alerts
 let favStatus = ref('');
 let favDisabled = ref(false);
+let alertvisible = ref(false);
+let currentAlert = ref({});
+
+function seeAlert(alert){
+  currentAlert.value = alert;
+  alertvisible.value = true;
+}
+
 
 async function getBusTime(){ // fetch api
   if(props.stop.code === '🔍 stop selection' || props.stop.code === undefined){

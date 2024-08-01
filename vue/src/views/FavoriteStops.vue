@@ -35,7 +35,6 @@ const visible = ref(false);
 let favWidth = ref(50);
 watch(selected, () => {
   favWidth.value = 50*selected.value.length;
-  console.log(favWidth.value)
 });
 </script>
 
